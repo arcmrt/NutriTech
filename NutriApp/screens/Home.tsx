@@ -19,13 +19,13 @@ function HomeScreen({ navigation }: { navigation: any }) {
     );
   }
   
-  function HomeStackScreen() {
-    return (
-      <HomeStack.Navigator>
-        <HomeStack.Screen name="Home" component={HomeScreen} />
-        <HomeStack.Screen name="Details" component={DetailsScreen} />
-      </HomeStack.Navigator>
-    );
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="HomeScreen" options={{headerShown: false}} component={HomeScreen} />
+      <HomeStack.Screen name="Details" options={{headerTransparent: true}} component={DetailsScreen} />
+    </HomeStack.Navigator>
+  );
   }
 
 export default HomeStackScreen;
