@@ -1,23 +1,31 @@
 import React from "react";
-import { Dimensions, ImageBackground, 
-         SafeAreaView,
+import { Dimensions,
+         ImageBackground, 
          Text,
+         TouchableOpacity,
          View,
- } from "react-native"; 
+ } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context"; 
 import Spacing from "../constants/Spacing";
 import FontSize from "@/constants/FontSize";
 import Colors from "@/constants/colors/Colors";
 import Fonts from "@/constants/Font";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@/types";
 
- const {height} = Dimensions.get("window")
+ const {height} = Dimensions.get("window");
 
- const WelcomeScreen = () => {
+ type Props = NativeStackScreenProps<RootStackParamList, "Welcome">;
+
+
+ const WelcomeScreen:React.FC<Props> = ({navigation:{navigate}}) => {
     return (
         <SafeAreaView>
             <View>
                 <ImageBackground 
                     style={{
                         height: height / 2.5,
+                        alignContent: "center",
                         //backgroundColor: Colors.blue,
                         marginTop: Spacing * 5,
                     }}
@@ -39,7 +47,76 @@ import Fonts from "@/constants/Font";
                 }}> 
                     Discover all about what you eat
                 </Text>
+                <Text style={{
+                    fontSize: FontSize.large,
+                    color: Colors.blue,
+                    fontWeight: "bold",
+                    fontStyle: "italic",
+                    //fontFamily: Fonts["poppins-bold"],
+                    textAlign: "center",
+                    marginTop: Spacing * 1,
+                }}>
+                    Explore the world of nutrition
+                </Text>
+            </View>
+            <View
+                style={{
+                    paddingHorizontal: Spacing * 2,
+                    paddingTop: Spacing * 10,
+                    flexDirection: "row",
+                }}>
+                <TouchableOpacity
+                    onPress={() => navigate("Login")} 
+                    style={{
+                        paddingVertical: Spacing * 1.5,
+                        paddingHorizontal: Spacing * 2,
+                        width: "48%",
+                        borderRadius: 10,
+                        shadowColor: Colors.blue,
+                        shadowOffset: {
+                            width: 0,
+                            height: Spacing,
+                        },
+                        shadowOpacity: 0.5, // modify
+                        shadowRadius: 10,
+                        
+                        backgroundColor: Colors.blue,
 
+                    }}>
+                    <Text style={{
+                        fontSize: FontSize.large,
+                        fontWeight: "bold",
+                        color: Colors.light,
+                        //fontFamily: Fonts["poppins-bold"],
+                        textAlign: "center",
+                    }}>
+                        Login
+                    </Text>
+                </TouchableOpacity>
+                <View style={{width: "4%"}}/>
+                <TouchableOpacity
+                    onPress={() => navigate("Register")} 
+                    style={{
+                        paddingVertical: Spacing * 1.5,
+                        paddingHorizontal: Spacing * 2,
+                        width: "48%",
+                        borderRadius: 10,
+
+                        
+
+                        backgroundColor: Colors.light,
+
+                    }}>
+                    <Text style={{
+                        fontSize: FontSize.large,
+                        fontWeight: "bold",
+                        color: "black",
+                        //fontFamily: Fonts["poppins-bold"],
+                        textAlign: "center",
+                    }}>
+                        Register
+                    </Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );

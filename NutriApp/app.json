@@ -7,7 +7,7 @@
     "icon": "./assets/images/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/NutriAppSplashScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
