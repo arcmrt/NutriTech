@@ -10,6 +10,7 @@ import ProfileScreen from './ProfileScreen';
 import { TableSummaryColumn } from 'aws-cdk-lib/aws-cloudwatch';
 import WelcomeScreen from './WelcomeScreen';
 import { useNavigation } from '@react-navigation/native';
+import RecipeScreen from "@/screens/RecipeScreen";
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -54,6 +55,9 @@ function HomeTabs() {
               }
               else if (route.name === 'Logout') {
                 iconTag = focused ? 'log-out' : 'log-out-outline';
+              }
+              else if (route.name === 'Recipes') {
+                iconTag = focused ? 'book' : 'book-outline';
               }
 
               return <Ionicons name={iconTag} size={size} color={color} />;
