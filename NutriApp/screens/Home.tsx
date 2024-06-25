@@ -5,13 +5,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-import DetailsScreen from './DetailsScreen';
-import ProfileScreen from './ProfileScreen';
+import DetailsScreen from '../screens/DetailsScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import { TableSummaryColumn } from 'aws-cdk-lib/aws-cloudwatch';
-import WelcomeScreen from './WelcomeScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
 import { useNavigation } from '@react-navigation/native';
-import RecipeScreen from "@/screens/RecipeScreen";
-import RecipesScreen from './RecipesScreen';
+import RecipesScreen from '../screens/RecipesScreen';
 import Colors from '@/constants/colors/Colors';
 import FontSize from '@/constants/FontSize';
 
@@ -58,9 +57,6 @@ function HomeTabs() {
               }
               else if (route.name === 'Logout') {
                 iconTag = focused ? 'log-out' : 'log-out-outline';
-              }
-              else if (route.name === 'Recipes') {
-                iconTag = focused ? 'book' : 'book-outline';
               }
 
               return <Ionicons name={iconTag} size={size} color={color} />;

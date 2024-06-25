@@ -20,6 +20,7 @@ export type RootStackParamList = {
   Details:undefined;
   Settings:undefined;
   Recipes:undefined;
+  Recipe:undefined;
 };
 
 /**

@@ -1,11 +1,16 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Spacing from '@/constants/Spacing'
 import FontSize from '@/constants/FontSize'
 import Colors from '@/constants/colors/Colors'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { RootStackParamList } from '@/types'
+import { Color } from 'aws-cdk-lib/aws-cloudwatch'
 
-const RecipesScreen = () => {
+type Props = NativeStackScreenProps<RootStackParamList, "Recipes">;
+
+const RecipesScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   return (
     <SafeAreaView style={{ flex: 1, padding: Spacing }}>
       <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: FontSize.medium }}>
@@ -14,6 +19,15 @@ const RecipesScreen = () => {
       <Text style={{ textAlign: "center", fontSize: FontSize.small, marginTop: 5, color: Colors.textGray }}>
         You can choose various delicious options from various amount of recipes that lies below.
       </Text>
+      <TouchableOpacity 
+        onPress={() => navigate('Recipe')}
+        style={{marginTop:Spacing, backgroundColor:Colors.textGray, borderRadius:30,}}>
+        
+        <Text style={{textAlign:"center"}}>
+          Go to recipes
+        </Text>
+      </TouchableOpacity>
+      
       <ScrollView style={{ flex: 1, marginTop: Spacing, marginHorizontal:Spacing, }}>
         <Text>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc dapibus nunc quis ullamcorper tincidunt. Phasellus elementum quis urna non finibus. Aenean eu facilisis turpis, ac varius nibh. Suspendisse quam purus, facilisis in ultricies molestie, consequat sit amet justo. Cras eu iaculis elit. Aliquam est eros, egestas in sagittis eget, pharetra sit amet felis. Aliquam nunc nulla, fermentum quis vehicula luctus, eleifend in libero. Nullam lacus nulla, pulvinar nec eleifend ut, congue iaculis justo. Vestibulum vehicula luctus justo, et tincidunt arcu elementum a.
