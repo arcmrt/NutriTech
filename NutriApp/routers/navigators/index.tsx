@@ -12,6 +12,8 @@ import Home from "@/screens/Home";
 import ProfileScreen from "@/screens/ProfileScreen";
 import DetailsScreen from "@/screens/DetailsScreen";
 import RecipeScreen from "@/screens/RecipeScreen";
+import SettingsScreen from "@/screens/SettingsScreen";
+import RecipesScreen from "@/screens/RecipesScreen";
 
 const theme = {
   ...DefaultTheme,
@@ -49,6 +51,8 @@ function RootNavigator() {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Details" component={DetailsScreen} />
       <Stack.Screen name="Recipe" component={RecipeScreen} />
+      <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: true}} />
+      <Stack.Screen name="Recipes" component={RecipesScreen}/>
     </Stack.Navigator>
   );
 }

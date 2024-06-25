@@ -11,15 +11,18 @@ import { TableSummaryColumn } from 'aws-cdk-lib/aws-cloudwatch';
 import WelcomeScreen from './WelcomeScreen';
 import { useNavigation } from '@react-navigation/native';
 import RecipeScreen from "@/screens/RecipeScreen";
+import RecipesScreen from './RecipesScreen';
+import Colors from '@/constants/colors/Colors';
+import FontSize from '@/constants/FontSize';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
 function Home() {
   return (
-    <SafeAreaView>
-      <Text>Home Screen</Text>
-    </SafeAreaView>
+    <SafeAreaView style={{}}>
+      <Text style={{textAlign:"center", fontWeight:"bold", fontSize:FontSize.medium}}>Coming Soon..</Text>
+      </SafeAreaView>
   );
 }
 
@@ -40,10 +43,10 @@ function HomeTabs() {
             
             tabBarIcon: ({ focused, color, size }) => {
               let iconTag;
-              size = 30;
+              size = 32;
 
-              if(route.name === "Welcome"){
-                iconTag = focused ? "earth": "earth-outline"; 
+              if(route.name === "Recipes"){
+                iconTag = focused ? "pizza": "pizza-outline"; 
               }
 
               else if (route.name === 'Home') {
@@ -64,16 +67,14 @@ function HomeTabs() {
             },
 
             // tabBar styling
-            tabBarActiveTintColor: 'lightblue',
-            tabBarInactiveTintColor: 'orange',
-            tabBarLabelStyle: {
+            tabBarActiveTintColor: Colors.blue,
+            tabBarInactiveTintColor: Colors.darkText,
+            tabBarLabelStyle: ({focused}: {focused:boolean}) => ({
+              color: focused ? Colors.blue : Colors.darkText,
               fontSize: 12,
-              color: "green",
-              borderTopWidth: 1,
-              borderTopColor: "lightgray",
               height: 15,
               fontWeight: "bold",
-            },
+            }),
             headerShown: false,
             animation:"fade",
 
@@ -87,12 +88,14 @@ function HomeTabs() {
               // Do something with the `navigation` object
             }
           })} />
+          <Tab.Screen name="Recipes" component={RecipesScreen} />
           <Tab.Screen name="Profile" component={ProfileScreen} />
          
           <Tab.Screen 
             name="Logout" 
             component={BlankScreen}
             listeners={{
+
               tabPress: handleLogoutPress
             }}
           />

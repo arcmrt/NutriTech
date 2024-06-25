@@ -70,50 +70,53 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
               Forgot password?
             </Text>
           </View>
-            <TouchableOpacity
-              onPress={() => navigate("Home")} 
-              
-              style={{
-                padding: Spacing * 2,
-                backgroundColor: Colors.blue,
-                borderRadius: 10,
-                marginVertical: Spacing * 2,
-
-                shadowColor: Colors.blue,
-                shadowOffset: { width: 0, height: Spacing },
-                shadowOpacity: 0.5,
-                shadowRadius: Spacing,
-            }}>
-              <Text style={{
-                color: Colors.light,
-                textAlign: "center",
-                fontSize: FontSize.large,
-                fontWeight: "bold",
-              }}>
-                Sign In
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => navigate("Register")}
-              style={{
-              padding: Spacing,
+          <TouchableOpacity
+            onPress={() => navigate("Home")} 
+            
+            style={{
+              padding: Spacing * 2,
+              backgroundColor: Colors.blue,
               borderRadius: 10,
-              marginVertical: Spacing,
+              marginVertical: Spacing * 2,
 
               shadowColor: Colors.blue,
               shadowOffset: { width: 0, height: Spacing },
               shadowOpacity: 0.5,
               shadowRadius: Spacing,
+
+              elevation: 5, // For Android
+          }}>
+            <Text style={{
+              color: Colors.light,
+              textAlign: "center",
+              fontSize: FontSize.large,
+              fontWeight: "bold",
             }}>
-              <Text style={{
-                color: Colors.text,
-                textAlign: "center",
-                fontSize: FontSize.small,
-                fontWeight: "bold",
-              }}>
-                Create new account
-              </Text>
-            </TouchableOpacity>
+              Sign In
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigate("Register")}
+            style={{
+            padding: Spacing,
+            borderRadius: 10,
+            marginVertical: Spacing,
+
+            shadowColor: Colors.blue,
+            shadowOffset: { width: 0, height: Spacing },
+            shadowOpacity: 0.5,
+            shadowRadius: Spacing,
+
+          }}>
+            <Text style={{
+              color: Colors.text,
+              textAlign: "center",
+              fontSize: FontSize.small,
+              fontWeight: "bold",
+            }}>
+              Create new account
+            </Text>
+          </TouchableOpacity>
         </View>
     </SafeAreaView>
   )

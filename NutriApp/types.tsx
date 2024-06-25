@@ -18,6 +18,8 @@ export type RootStackParamList = {
   Home:undefined;
   Profile:undefined;
   Details:undefined;
+  Settings:undefined;
+  Recipes:undefined;
 };
 
 /**

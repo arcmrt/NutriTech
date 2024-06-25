@@ -79,6 +79,8 @@ import { RootStackParamList } from "@/types";
                         },
                         shadowOpacity: 0.5, // modify
                         shadowRadius: 10,
+
+                        elevation: 10, // For Android
                         
                         backgroundColor: Colors.blue,
 
@@ -101,11 +103,16 @@ import { RootStackParamList } from "@/types";
                         paddingHorizontal: Spacing * 2,
                         width: "48%",
                         borderRadius: 10,
-
-                        
-
                         backgroundColor: Colors.light,
+                        shadowColor: Colors.text,
+                        shadowOffset: {
+                            width: 0,
+                            height: Spacing,
+                        },
+                        shadowOpacity: 0.5, // modify
+                        shadowRadius: 10,
 
+                        elevation: 10, // For Android
                     }}>
                     <Text style={{
                         fontSize: FontSize.large,
