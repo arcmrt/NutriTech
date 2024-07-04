@@ -125,6 +125,41 @@ import { RootStackParamList } from "@/types";
                     </Text>
                 </TouchableOpacity>
             </View>
+            <View style={{
+                paddingHorizontal: Spacing ,
+                paddingTop: Spacing,
+                alignContent: "center",
+                justifyContent: "center",
+            }}>
+            <TouchableOpacity
+                    onPress={() => navigate("Home")} 
+                    style={{
+                        paddingVertical: Spacing * 1.5,
+                        paddingHorizontal: Spacing * 2,
+                        width: "48%",
+                        borderRadius: 10,
+                        backgroundColor: Colors.light,
+                        shadowColor: Colors.text,
+                        shadowOffset: {
+                            width: 0,
+                            height: Spacing,
+                        },
+                        shadowOpacity: 0.5, // modify
+                        shadowRadius: 10,
+
+                        elevation: 10, // For Android
+                    }}>
+                    <Text style={{
+                        fontSize: FontSize.large,
+                        fontWeight: "bold",
+                        color: "black",
+                        //fontFamily: Fonts["poppins-bold"],
+                        textAlign: "center",
+                    }}>
+                        Dev Pass
+                    </Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     );
  };
