@@ -4,9 +4,10 @@ import { View,
          TouchableOpacity,
          ImageBackground,
          Dimensions,
+         Alert,
          
             } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types';
@@ -14,11 +15,45 @@ import Spacing from '@/constants/Spacing';
 import FontSize from '@/constants/FontSize';
 import Colors from '@/constants/colors/Colors';
 import InputText from '@/components/InputText';
+import { signIn } from "aws-amplify/auth";
 
 const {height} = Dimensions.get("window");
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
 const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
+
+  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const handleSignIn = async () => {
+    if (!email || !password) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    try {
+      setError('');
+      const { isSignedIn, nextStep } = await signIn({
+        username: email,
+        password,
+        options:{
+          userAttributes:{
+          },
+        }
+        
+
+      });
+      navigate("Home");
+      Alert.alert('Success', 'Sign In successful!');
+    } catch (error: any) {
+      console.warn(error.message);
+      setError(error.message);
+    }
+  };
+
+  
   return (
     <SafeAreaView>
         <View style={{
@@ -55,10 +90,11 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
           <View style={{
             marginVertical: Spacing * 3,
           }}>
-            <InputText placeholder='example@example.com' />
-            <InputText placeholder='Password' secureTextEntry/>
+            <InputText value={email} onChangeText={setEmail} placeholder='example@example.com' />
+            <InputText value={password} onChangeText={setPassword} placeholder='Password' secureTextEntry/>
             
           </View>
+          {error ? <Text style={{ color: 'red', textAlign: 'center' }}>{error}</Text> : null}
           <View>
             <Text style={{
               fontFamily: "Roboto",
@@ -71,7 +107,9 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
             </Text>
           </View>
           <TouchableOpacity
-            onPress={() => navigate("Home")} 
+            onPress={handleSignIn}
+            
+             
             
             style={{
               padding: Spacing * 2,

@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-nutriapp-dev-e4b2c-authRole",
+      "UnauthRoleArn": "arn:aws:iam::590183982297:role/amplify-nutriapp-dev-e4b2c-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::590183982297:role/amplify-nutriapp-dev-e4b2c-authRole",
+      "Region": "eu-west-1",
+      "DeploymentBucketName": "amplify-nutriapp-dev-e4b2c-deployment",
+      "UnauthRoleName": "amplify-nutriapp-dev-e4b2c-unauthRole",
+      "StackName": "amplify-nutriapp-dev-e4b2c",
+      "StackId": "arn:aws:cloudformation:eu-west-1:590183982297:stack/amplify-nutriapp-dev-e4b2c/1faf8b10-37ae-11ef-b490-061c163f1cd5",
+      "AmplifyAppId": "d29yg5yok1chpn"
+    },
+    "categories": {
+      "auth": {
+        "nutriappaf406581": {}
+      }
+    }
+  }
+}

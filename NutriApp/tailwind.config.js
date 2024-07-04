@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./screens/**/*.{js,jsx,ts,tsx}"],
+  content: [
+    "./App.tsx",
+    "./src/**/*.{js,jsx,ts,tsx}",
+    "./screens/**/*.{js,jsx,ts,tsx}"
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -19,4 +23,3 @@ module.exports = {
   },
   plugins: [],
 }
-

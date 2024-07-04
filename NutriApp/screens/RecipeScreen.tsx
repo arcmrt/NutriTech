@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const recipes = [
     { title: 'Recipe 1', description: 'This is recipe 1' },
@@ -9,19 +10,21 @@ const recipes = [
 
 const RecipeScreen = () => {
     return (
-        <View style={styles.container}>
-            <Text style={styles.header}>Recipes</Text>
-            <FlatList
-                data={recipes}
-                keyExtractor={(item) => item.title}
-                renderItem={({ item }) => (
-                    <View style={styles.recipeItem}>
-                        <Text style={styles.recipeTitle}>{item.title}</Text>
-                        <Text style={styles.recipeDescription}>{item.description}</Text>
-                    </View>
-                )}
-            />
-        </View>
+        <SafeAreaView style={styles.container}>
+                <Text style={styles.header}>Recipes</Text>
+                <FlatList
+                    data={recipes}
+                    keyExtractor={(item) => item.title}
+                    renderItem={({ item }) => (
+                        <View style={styles.recipeItem}>
+                            <Text style={styles.recipeTitle}>{item.title}</Text>
+                            <Text style={styles.recipeDescription}>{item.description}</Text>
+                        </View>
+                    )}
+                />
+
+        </SafeAreaView>
+
     );
 };
 

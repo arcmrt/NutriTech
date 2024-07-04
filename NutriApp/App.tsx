@@ -2,6 +2,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 // import  fonts  from "./config/fonts";
 import Navigation from '@/routers/navigators';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {Amplify} from 'aws-amplify';
+import awsconfig from './src/aws-exports'; 
+
+Amplify.configure(awsconfig);
+
 const Tab = createBottomTabNavigator();
 
 export default function App() {
