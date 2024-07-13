@@ -61,10 +61,10 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
         }}>
           <ImageBackground 
               style={{
-                  height: height / 7,
+                  height: height / 4,
                   marginVertical: Spacing * 2,
               }}
-              resizeMode="center"
+              resizeMode="contain"
               
               source={require("../assets/images/adaptive-icon.png")}
           /> 
@@ -90,8 +90,8 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
           <View style={{
             marginVertical: Spacing * 3,
           }}>
-            <InputText value={email} onChangeText={setEmail} placeholder='example@example.com' />
-            <InputText value={password} onChangeText={setPassword} placeholder='Password' secureTextEntry/>
+            <InputText value={email} autoCapitalize= "none" onChangeText={setEmail} placeholder='example@example.com' />
+            <InputText value={password} autoCapitalize= "none" onChangeText={setPassword} placeholder='Password' secureTextEntry/>
             
           </View>
           {error ? <Text style={{ color: 'red', textAlign: 'center' }}>{error}</Text> : null}
