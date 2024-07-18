@@ -15,6 +15,7 @@ export type RootStackParamList = {
   Welcome: undefined;
   Login: undefined;
   Register: undefined;
+  VerifyScreen: { username: string };
   Home:undefined;
   Profile:undefined;
   Details:undefined;

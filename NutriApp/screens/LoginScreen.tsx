@@ -1,10 +1,10 @@
 import { View,
          Text,
-         TextInput,
          TouchableOpacity,
          ImageBackground,
          Dimensions,
          Alert,
+         ActivityIndicator
          
             } from 'react-native'
 import React, { useState } from 'react'
@@ -26,28 +26,31 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSignIn = async () => {
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
+    setLoading(true);
 
     try {
       setError('');
-      const { isSignedIn, nextStep } = await signIn({
+      const {} = await signIn({
         username: email,
         password,
         options:{
-          userAttributes:{
-          },
         }
         
 
       });
+      setLoading(false);
       navigate("Home");
       Alert.alert('Success', 'Sign In successful!');
+      
     } catch (error: any) {
+      setLoading(false);
       console.warn(error.message);
       setError(error.message);
     }
@@ -61,7 +64,7 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
         }}>
           <ImageBackground 
               style={{
-                  height: height / 4,
+                  height: height / 5,
                   marginVertical: Spacing * 2,
               }}
               resizeMode="contain"
@@ -106,10 +109,12 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
               Forgot password?
             </Text>
           </View>
+
+          {loading ? (
+          <ActivityIndicator size="large" color={Colors.blue} />
+        ) : (
           <TouchableOpacity
             onPress={handleSignIn}
-            
-             
             
             style={{
               padding: Spacing * 2,
@@ -133,6 +138,11 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
               Sign In
             </Text>
           </TouchableOpacity>
+         )}
+
+        {loading ? (
+          <ActivityIndicator size="large" color={Colors.blue} />
+        ) : (
           <TouchableOpacity
             onPress={() => navigate("Register")}
             style={{
@@ -155,6 +165,7 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
               Create new account
             </Text>
           </TouchableOpacity>
+        )}
         </View>
     </SafeAreaView>
   )

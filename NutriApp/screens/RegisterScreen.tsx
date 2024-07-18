@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ImageBackground, Dimensions, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ImageBackground, Dimensions, TouchableOpacity, Alert,ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Spacing from '@/constants/Spacing';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -18,16 +18,18 @@ const RegisterScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSignUp = async () => {
     if (!email || !username || !password) {
       setError('Please fill in all fields');
       return;
     }
+    setLoading(true);
 
     try {
       setError('');
-      const { userId } = await signUp({
+      const { userId, nextStep } = await signUp({
         username: email,
         password,
         options:{
@@ -35,12 +37,18 @@ const RegisterScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
             email,
             name: username,
           },
-          autoSignIn:true,
+          
+          
         }
 
       });
-      Alert.alert('Success', 'Sign up successful!');
+      setLoading(false);
+      if(nextStep){
+        navigate("VerifyScreen", { username:email });
+      }
+
     } catch (error: any) {
+      setLoading(false);
       setError(error.message);
     }
   };
@@ -81,28 +89,32 @@ const RegisterScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
           <InputText value={password} autoCapitalize= "none" onChangeText={setPassword} placeholder='Password' secureTextEntry/>
         </View>
         {error ? <Text style={{ color: 'red', textAlign: 'center' }}>{error}</Text> : null}
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={{
-            padding: Spacing * 2,
-            backgroundColor: Colors.blue,
-            borderRadius: 10,
-            marginVertical: Spacing,
-            shadowColor: Colors.blue,
-            shadowOffset: { width: 0, height: Spacing },
-            shadowOpacity: 0.5,
-            shadowRadius: Spacing,
-            elevation: 5,
-          }}>
-          <Text style={{
-            color: Colors.light,
-            textAlign: "center",
-            fontSize: FontSize.large,
-            fontWeight: "bold",
-          }}>
-            Sign Up
-          </Text>
-        </TouchableOpacity>
+        {loading ? (
+          <ActivityIndicator size="large" color={Colors.blue} />
+        ) : ( 
+          <TouchableOpacity
+            onPress={handleSignUp}
+            style={{
+              padding: Spacing * 2,
+              backgroundColor: Colors.blue,
+              borderRadius: 10,
+              marginVertical: Spacing,
+              shadowColor: Colors.blue,
+              shadowOffset: { width: 0, height: Spacing },
+              shadowOpacity: 0.5,
+              shadowRadius: Spacing,
+              elevation: 5,
+            }}>
+            <Text style={{
+              color: Colors.light,
+              textAlign: "center",
+              fontSize: FontSize.large,
+              fontWeight: "bold",
+            }}>
+              Sign Up
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
