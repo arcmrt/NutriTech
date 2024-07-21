@@ -16,12 +16,13 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   VerifyScreen: { username: string };
-  Home:undefined;
-  Profile:undefined;
-  Details:undefined;
-  Settings:undefined;
-  Recipes:undefined;
-  Recipe:undefined;
+  Home:{username: string};
+  VitalsForm:{username: string};
+  Profile:{username: string};
+  Details:{username: string};
+  Settings:{username: string};
+  Recipes: {username: string};
+  Recipe:{username: string};
 };
 
 /**

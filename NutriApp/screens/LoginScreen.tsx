@@ -41,12 +41,11 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
         username: email,
         password,
         options:{
+          authFlowType: 'USER_PASSWORD_AUTH'
         }
-        
-
       });
       setLoading(false);
-      navigate("Home");
+      navigate("Home", {username: email});
       Alert.alert('Success', 'Sign In successful!');
       
     } catch (error: any) {

@@ -108,6 +108,39 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
               {">"}
             </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigate("VitalsForm")} 
+            style={{
+              flexDirection:"row",
+              marginTop: Spacing * 2,
+              borderColor: Colors.gray,
+            }}>
+            <ImageBackground 
+              style={{
+                height: 25,
+                width: 25,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}          
+              resizeMode="cover" 
+              source={require('../assets/images/profile2.png')}
+            />
+            <Text 
+              style={{
+                fontSize: 20,
+                fontWeight: 'bold',
+                marginLeft: Spacing,
+              }}>
+              User Vitals
+            </Text>
+            <Text 
+              style={{
+                fontSize: 20,
+                marginLeft: 'auto',  
+              }}>
+              {">"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

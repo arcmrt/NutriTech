@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, ImageBackground, Dimensions } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Spacing from '@/constants/Spacing'
 import FontSize from '@/constants/FontSize'
@@ -7,6 +7,7 @@ import Colors from '@/constants/colors/Colors'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/types'
 import { Color } from 'aws-cdk-lib/aws-cloudwatch'
+import axios from 'axios'
 
 const {height} = Dimensions.get("window");
 type Props = NativeStackScreenProps<RootStackParamList, "Recipes">;
@@ -24,7 +25,8 @@ const RecipeShort = ({ onPress, title }: { onPress: () => void; title: string })
               resizeMode="contain"
               
               source={require("../assets/images/adaptive-icon.png")}
-          /> 
+      />
+
     </View>
   </TouchableOpacity>
 );
@@ -45,7 +47,28 @@ const styles = {
   },
 };
 
-const RecipesScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
+const RecipesScreen: React.FC<Props> = ({route, navigation: { navigate } }) => {
+  const { username: initialUsername} = route.params;
+  const [userName, setUsername] = useState(initialUsername || '');
+  
+  const [recipes, setRecipes] = useState<any[]>([]);
+
+  useEffect(() => {
+      const fetchRecipes = async () => {
+          const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search'; // Replace with your actual API URL
+          try {
+              const response = await axios.post(lambdaApiUrl, { userName });
+              if (response.data) {
+                  setRecipes(response.data);
+              }
+          } catch (error) {
+              console.error('Error fetching recipes:', error);
+          }
+      };
+
+      fetchRecipes();
+  }, [userName]);
+
   return (
     <SafeAreaView style={{ flex: 1, padding: Spacing }}>
       <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: FontSize.medium }}>
@@ -71,6 +94,9 @@ const RecipesScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
             title={`Recipe ${i + 1}`}
           />
         ))}
+
+        <Text>{recipes.title}</Text>
+        <Text>{recipes.instructions}</Text>
 
       </ScrollView>
     </SafeAreaView>

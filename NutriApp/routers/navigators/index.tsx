@@ -15,6 +15,7 @@ import RecipeScreen from "@/screens/RecipeScreen";
 import SettingsScreen from "@/screens/SettingsScreen";
 import RecipesScreen from "@/screens/RecipesScreen";
 import VerifyScreen from "@/screens/VerifyScreen";
+import VitalsFormScreen from "@/screens/VitalsFormScreen";
 
 
 const theme = {
@@ -51,6 +52,7 @@ function RootNavigator() {
       <Stack.Screen name="Register" component={RegisterScreen} />
       <Stack.Screen name="VerifyScreen" component={VerifyScreen} />
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen name="VitalsForm" component={VitalsFormScreen} options={{headerShown: true}} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Details" component={DetailsScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: true}} />
