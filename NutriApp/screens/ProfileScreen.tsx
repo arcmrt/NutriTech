@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Spacing from "@/constants/Spacing";
 import { RootStackParamList } from "@/types";
 import Colors from "@/constants/colors/Colors";
-import { getCurrentUser } from "aws-amplify/auth";  // Correct import
+import { getCurrentUser, fetchUserAttributes } from "aws-amplify/auth";  // Correct import
 
 const { height } = Dimensions.get("window");
 
@@ -20,8 +20,8 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   const currentAuthenticatedUser = async () => {
     try {
-      const user = await getCurrentUser();
-      const username = user.username;
+      const user = await fetchUserAttributes();
+      const username = user.name;
       setUsername(username);
       console.log(`The username: ${username}`);
     } catch (err) {

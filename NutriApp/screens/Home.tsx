@@ -16,6 +16,7 @@ import FontSize from '@/constants/FontSize';
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {RootStackParamList} from "@/types";
+import { fetchUserAttributes } from '@aws-amplify/auth';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -23,15 +24,33 @@ const HomeStack = createNativeStackNavigator();
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const Home: React.FC<Props> = ({route, navigation: { navigate } }) => {
+
     const [recipes, setRecipes] = useState<any[]>([]);
-    const { username: initialUsername} = route.params || {};
+    const { username: initialUsername} = route.params || {};// username, initialUsername = email
     const [userName, setUsername] = useState(initialUsername || '');
+
+
+    useEffect(() => {
+      currentAuthenticatedUser();
+    }, []);
+
+    const currentAuthenticatedUser = async () => {
+      try {
+        const user = await fetchUserAttributes();
+        const username = user.name;
+        setUsername(username);
+        console.log(`The username: ${userName}`);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    
 
     useEffect(() => {
         const fetchRecipes = async () => {
             const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search'; // Replace with your actual API URL
             try {
-                const response = await axios.post(lambdaApiUrl, { userName });
+                const response = await axios.post(lambdaApiUrl, { userName: "borabalci4" });
                 if (response.data) {
                     setRecipes(response.data);
                 }
