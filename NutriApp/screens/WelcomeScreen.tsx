@@ -12,6 +12,7 @@ import Colors from "@/constants/colors/Colors";
 import Fonts from "@/constants/Font";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@/types";
+import {signOut} from "@aws-amplify/auth";
 
  const {height} = Dimensions.get("window");
 
@@ -19,7 +20,14 @@ import { RootStackParamList } from "@/types";
 
 
  const WelcomeScreen:React.FC<Props> = ({navigation:{navigate}}) => {
-    return (
+     async function handleSignOut() {
+         try {
+             await signOut();
+         } catch (error) {
+             console.log('error signing out: ', error);
+         }
+     }
+     return (
         <SafeAreaView>
             <View>
                 <ImageBackground 
@@ -158,6 +166,36 @@ import { RootStackParamList } from "@/types";
                     }}>
                         Dev Pass
                     </Text>
+
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => handleSignOut()}
+                    style={{
+                        paddingVertical: Spacing * 1.5,
+                        paddingHorizontal: Spacing * 2,
+                        width: "48%",
+                        borderRadius: 10,
+                        backgroundColor: Colors.light,
+                        shadowColor: Colors.text,
+                        shadowOffset: {
+                            width: 0,
+                            height: Spacing,
+                        },
+                        shadowOpacity: 0.5, // modify
+                        shadowRadius: 10,
+
+                        elevation: 10, // For Android
+                    }}>
+                    <Text style={{
+                        fontSize: FontSize.large,
+                        fontWeight: "bold",
+                        color: "black",
+                        //fontFamily: Fonts["poppins-bold"],
+                        textAlign: "center",
+                    }}>
+                        Sign Out
+                    </Text>
+
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

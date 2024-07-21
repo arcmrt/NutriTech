@@ -48,7 +48,7 @@ const styles = {
 };
 
 const RecipesScreen: React.FC<Props> = ({route, navigation: { navigate } }) => {
-  const { username: initialUsername} = route.params;
+  const { username: initialUsername} = route.params || {};
   const [userName, setUsername] = useState(initialUsername || '');
   
   const [recipes, setRecipes] = useState<any[]>([]);

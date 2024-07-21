@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Text, View } from 'react-native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {createNativeStackNavigator, NativeStackScreenProps} from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -13,12 +13,37 @@ import { useNavigation } from '@react-navigation/native';
 import RecipesScreen from '../screens/RecipesScreen';
 import Colors from '@/constants/colors/Colors';
 import FontSize from '@/constants/FontSize';
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {RootStackParamList} from "@/types";
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 
-function Home() {
-  return (
+type Props = NativeStackScreenProps<RootStackParamList, "Home">;
+
+const Home: React.FC<Props> = ({route, navigation: { navigate } }) => {
+    const [recipes, setRecipes] = useState<any[]>([]);
+    const { username: initialUsername} = route.params || {};
+    const [userName, setUsername] = useState(initialUsername || '');
+
+    useEffect(() => {
+        const fetchRecipes = async () => {
+            const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search'; // Replace with your actual API URL
+            try {
+                const response = await axios.post(lambdaApiUrl, { userName });
+                if (response.data) {
+                    setRecipes(response.data);
+                }
+            } catch (error) {
+                console.error('Error fetching recipes:', error);
+            }
+        };
+
+        fetchRecipes();
+    }, [userName]);
+
+    return (
     <SafeAreaView style={{}}>
       <Text style={{textAlign:"center", fontWeight:"bold", fontSize:FontSize.medium}}>Coming Soon..</Text>
       </SafeAreaView>
