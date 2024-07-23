@@ -111,37 +111,34 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
 
           {loading ? (
           <ActivityIndicator size="large" color={Colors.blue} />
-        ) : (
-          <TouchableOpacity
-            onPress={handleSignIn}
-            
-            style={{
-              padding: Spacing * 2,
-              backgroundColor: Colors.blue,
-              borderRadius: 10,
-              marginVertical: Spacing * 2,
+         ) : (
+            <TouchableOpacity
+              onPress={handleSignIn}
+              
+              style={{
+                padding: Spacing * 2,
+                backgroundColor: Colors.blue,
+                borderRadius: 10,
+                marginVertical: Spacing * 2,
 
-              shadowColor: Colors.blue,
-              shadowOffset: { width: 0, height: Spacing },
-              shadowOpacity: 0.5,
-              shadowRadius: Spacing,
+                shadowColor: Colors.blue,
+                shadowOffset: { width: 0, height: Spacing },
+                shadowOpacity: 0.5,
+                shadowRadius: Spacing,
 
-              elevation: 5, // For Android
-          }}>
-            <Text style={{
-              color: Colors.light,
-              textAlign: "center",
-              fontSize: FontSize.large,
-              fontWeight: "bold",
+                elevation: 5, // For Android
             }}>
-              Sign In
-            </Text>
-          </TouchableOpacity>
+              <Text style={{
+                color: Colors.light,
+                textAlign: "center",
+                fontSize: FontSize.large,
+                fontWeight: "bold",
+              }}>
+                Sign In
+              </Text>
+            </TouchableOpacity>
          )}
 
-        {loading ? (
-          <ActivityIndicator size="large" color={Colors.blue} />
-        ) : (
           <TouchableOpacity
             onPress={() => navigate("Register")}
             style={{
@@ -153,7 +150,6 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
             shadowOffset: { width: 0, height: Spacing },
             shadowOpacity: 0.5,
             shadowRadius: Spacing,
-
           }}>
             <Text style={{
               color: Colors.text,
@@ -164,7 +160,7 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
               Create new account
             </Text>
           </TouchableOpacity>
-        )}
+  
         </View>
     </SafeAreaView>
   )
