@@ -109,7 +109,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigate("VitalsForm")} 
+            onPress={() => navigate("VitalsForm",{username: username})} 
             style={{
               flexDirection:"row",
               marginTop: Spacing * 2,

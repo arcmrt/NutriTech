@@ -15,7 +15,7 @@ import FontSize from '@/constants/FontSize';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { RootStackParamList } from "@/types";
-import { fetchUserAttributes } from '@aws-amplify/auth';
+import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
 import Spacing from '@/constants/Spacing';
 import RenderHtml from "react-native-render-html"
 
@@ -90,7 +90,17 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
 function HomeTabs() {
     const navigation = useNavigation();
 
+    async function handleSignOut() {
+        try {
+            await signOut();
+            console.log('sign out success');
+        } catch (error) {
+            console.log('error signing out: ', error);
+        }
+    }
+
     const handleLogoutPress = (e: any) => {
+        handleSignOut();
         e.preventDefault();
         navigation.navigate('Welcome');
     };
