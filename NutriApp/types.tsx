@@ -23,6 +23,9 @@ export type RootStackParamList = {
   Settings:{username: string};
   Recipes: {username: string};
   Recipe:{username: string};
+
+
+  getRecipes:{username: string};
 };
 
 /**

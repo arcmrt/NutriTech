@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Dimensions,
          ImageBackground, 
          Text,
@@ -20,9 +20,15 @@ import {signOut} from "@aws-amplify/auth";
 
 
  const WelcomeScreen:React.FC<Props> = ({navigation:{navigate}}) => {
+
+    useEffect(() => {
+        handleSignOut();
+      }, []);
+
      async function handleSignOut() {
          try {
              await signOut();
+             console.log('sign out success');
          } catch (error) {
              console.log('error signing out: ', error);
          }
@@ -166,36 +172,6 @@ import {signOut} from "@aws-amplify/auth";
                     }}>
                         Dev Pass
                     </Text>
-
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => handleSignOut()}
-                    style={{
-                        paddingVertical: Spacing * 1.5,
-                        paddingHorizontal: Spacing * 2,
-                        width: "48%",
-                        borderRadius: 10,
-                        backgroundColor: Colors.light,
-                        shadowColor: Colors.text,
-                        shadowOffset: {
-                            width: 0,
-                            height: Spacing,
-                        },
-                        shadowOpacity: 0.5, // modify
-                        shadowRadius: 10,
-
-                        elevation: 10, // For Android
-                    }}>
-                    <Text style={{
-                        fontSize: FontSize.large,
-                        fontWeight: "bold",
-                        color: "black",
-                        //fontFamily: Fonts["poppins-bold"],
-                        textAlign: "center",
-                    }}>
-                        Sign Out
-                    </Text>
-
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

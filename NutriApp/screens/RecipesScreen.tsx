@@ -9,6 +9,7 @@ import { RootStackParamList } from '@/types'
 import { Color } from 'aws-cdk-lib/aws-cloudwatch'
 import axios from 'axios'
 
+
 const {height} = Dimensions.get("window");
 type Props = NativeStackScreenProps<RootStackParamList, "Recipes">;
 
@@ -53,21 +54,9 @@ const RecipesScreen: React.FC<Props> = ({route, navigation: { navigate } }) => {
   
   const [recipes, setRecipes] = useState<any[]>([]);
 
-  useEffect(() => {
-      const fetchRecipes = async () => {
-          const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search'; // Replace with your actual API URL
-          try {
-              const response = await axios.post(lambdaApiUrl, { userName });
-              if (response.data) {
-                  setRecipes(response.data);
-              }
-          } catch (error) {
-              console.error('Error fetching recipes:', error);
-          }
-      };
 
-      fetchRecipes();
-  }, [userName]);
+
+
 
   return (
     <SafeAreaView style={{ flex: 1, padding: Spacing }}>
@@ -95,8 +84,6 @@ const RecipesScreen: React.FC<Props> = ({route, navigation: { navigate } }) => {
           />
         ))}
 
-        <Text>{recipes.title}</Text>
-        <Text>{recipes.instructions}</Text>
 
       </ScrollView>
     </SafeAreaView>
