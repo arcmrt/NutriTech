@@ -18,6 +18,7 @@ import { RootStackParamList } from "@/types";
 import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
 import Spacing from '@/constants/Spacing';
 import RenderHtml from "react-native-render-html"
+import {BarChart, LineChart} from "react-native-gifted-charts";
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
@@ -26,9 +27,10 @@ type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
 const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
     const [recipe, setRecipe] = useState<any>(null);
+    const [info, setInfo] = useState<any>(null);
     const { username: initialUsername } = route.params || {};
     const [userName, setUsername] = useState(initialUsername || '');
-
+    const lineData = [{value: 0},{value: 20},{value: 18},{value: 40},{value: 36},{value: 60},{value: 54},{value: 85}]
     useEffect(() => {
       currentAuthenticatedUser();
     }, []);
@@ -50,8 +52,7 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
             try {
                 const response = await axios.post(lambdaApiUrl, { userName });
                 console.log('API response:', response.data);   
-   
-   
+
                 if (response.data) {
                     setRecipe(response.data);
                     console.log("The API username: ", userName);
@@ -70,14 +71,47 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
         }
     }, [userName]);
 
+    useEffect(() => {
+        const API_URL = 'https://uvz80evw9b.execute-api.eu-west-1.amazonaws.com/prod/getVitals';
+        const getUserInfo = async () => {
+            try {
+                const response = await axios.post(API_URL, { userName });
+                console.log('User info: ', response.data);
+                setInfo(response.data);
+            } catch (error) {
+                console.error('Error fetching user info:', error);
+                setInfo(null);
+            }
+        };
+        if (userName) {
+            getUserInfo();
+        }
+    }, [userName]);
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
+                <LineChart
+                    initialSpacing={0}
+                    data={lineData}
+                    spacing={30}
+                    hideDataPoints
+                    thickness={5}
+                    hideRules
+                    hideYAxisText
+                    yAxisColor="#0BA5A4"
+                    showVerticalLines
+                    verticalLinesColor="rgba(14,164,164,0.5)"
+                    xAxisColor="#0BA5A4"
+                    color="#0BA5A4"
+                />
                 {recipe ? (
                     <View style={{ padding: Spacing }}>
                         <Text style={{ padding: Spacing * 4, marginVertical: Spacing, textAlign: "center", justifyContent: "center", fontSize: FontSize.medium }}>{recipe.title}</Text>
                         <RenderHtml contentWidth={100} source={{ html: recipe.instructions }} />
+                        <Text style={{ padding: Spacing * 4, marginVertical: Spacing, textAlign: "center", justifyContent: "center", fontSize: FontSize.medium }}>{JSON.stringify(info)}</Text>
                     </View>
+
                 ) : (
                     <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: FontSize.medium }}>No recipe available</Text>
                 )}
@@ -86,6 +120,7 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
         </SafeAreaView>
     );
 }
+
 
 function HomeTabs() {
     const navigation = useNavigation();

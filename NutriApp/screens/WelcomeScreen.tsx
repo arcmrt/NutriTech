@@ -150,7 +150,7 @@ import {signOut} from "@aws-amplify/auth";
                     style={{
                         paddingVertical: Spacing * 1.5,
                         paddingHorizontal: Spacing * 2,
-                        width: "48%",
+                        width: "52%",
                         borderRadius: 10,
                         backgroundColor: Colors.light,
                         shadowColor: Colors.text,
