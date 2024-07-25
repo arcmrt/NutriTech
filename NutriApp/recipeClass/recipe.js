@@ -66,7 +66,6 @@ async function getRecipeById(recipeId) {
             }
         };
 
-        // Fetch basic recipe details
         const recipeResponse = await fetchWithRetry(`https://${RAPIDAPI_HOST}/recipes/${recipeId}/information`, options);
         const recipeData = recipeResponse.data;
 
@@ -80,7 +79,6 @@ async function getRecipeById(recipeId) {
             recipeData.missedIngredientCount
         );
 
-        // Fetch ingredients and nutrition details
         const ingredientsResponse = await fetchWithRetry(`https://${RAPIDAPI_HOST}/recipes/${recipeId}/ingredientWidget.json`, options);
         recipe.setIngredients(ingredientsResponse.data.ingredients);
 
@@ -90,12 +88,11 @@ async function getRecipeById(recipeId) {
         const instructionsResponse = await fetchWithRetry(`https://${RAPIDAPI_HOST}/recipes/${recipeId}/analyzedInstructions`, options);
         recipe.setInstructions(instructionsResponse.data[0]?.steps || []);
 
-        recipe.displayRecipeDetails();
+        return recipe;
     } catch (error) {
         console.error('Error fetching recipe data:', error);
+        return null;
     }
 }
 
-// Example usage
-getRecipeById(991010);
-
+module.exports = { getRecipeById };
