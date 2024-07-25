@@ -1,4 +1,6 @@
 const axios = require('axios');
+const fs = require('fs');
+const path = require('path');
 
 const RAPIDAPI_KEY = 'ccf1b8cfc0msheebd3296ec8da96p153ab6jsndb7e936a6550';
 const RAPIDAPI_HOST = 'spoonacular-recipe-food-nutrition-v1.p.rapidapi.com';
@@ -29,6 +31,25 @@ class Recipe {
         this.instructions = instructions;
     }
 
+    saveRecipeDetailsToFile() {
+        const recipeDetails = {
+            id: this.id,
+            title: this.title,
+            image: this.image,
+            imageType: this.imageType,
+            likes: this.likes,
+            usedIngredientCount: this.usedIngredientCount,
+            missedIngredientCount: this.missedIngredientCount,
+            ingredients: this.ingredients,
+            nutrition: this.nutrition,
+            instructions: this.instructions
+        };
+
+        const filePath = path.join(__dirname, `recipe_${this.id}.json`);
+        fs.writeFileSync(filePath, JSON.stringify(recipeDetails, null, 2), 'utf-8');
+        console.log(`Recipe details saved to ${filePath}`);
+    }
+
     displayRecipeDetails() {
         console.log(`ID: ${this.id}`);
         console.log(`Title: ${this.title}`);
@@ -40,6 +61,8 @@ class Recipe {
         console.log('Ingredients:', this.ingredients);
         console.log('Nutrition:', this.nutrition);
         console.log('Instructions:', this.instructions);
+
+        this.saveRecipeDetailsToFile();
     }
 }
 
@@ -96,3 +119,5 @@ async function getRecipeById(recipeId) {
 }
 
 module.exports = { getRecipeById };
+
+
