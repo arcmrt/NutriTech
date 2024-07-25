@@ -1,7 +1,7 @@
-const { getRecipeById } = require('./recipe');
+import { getRecipeById } from './recipe';
 
 async function testGetRecipeById() {
-    const recipeId = 716429;  // Replace with the recipe ID you want to test
+    const recipeId: number = 991010;  // Replace with the recipe ID you want to test
     const recipe = await getRecipeById(recipeId);
 
     if (recipe) {

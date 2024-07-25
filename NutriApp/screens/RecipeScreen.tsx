@@ -2,24 +2,23 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRoute } from '@react-navigation/native';
+import { useRoute, RouteProp } from '@react-navigation/native';
 import Spacing from '@/constants/Spacing';
 import FontSize from '@/constants/FontSize';
 import Colors from '@/constants/colors/Colors';
-import { getRecipeById } from '@/recipeClass/recipe';
+import { getRecipeById, Recipe } from '@/recipeClass/recipe';
+
+type RecipeScreenRouteProp = RouteProp<{ params: { recipeId: number } }, 'params'>;
 
 const RecipeScreen: React.FC = () => {
-    const [recipe, setRecipe] = useState<any>(null);
-    const route = useRoute();
+    const [recipe, setRecipe] = useState<Recipe | null>(null);
+    const route = useRoute<RecipeScreenRouteProp>();
     const { recipeId } = route.params || {};
-
-    console.log('Route params:', route.params);  // Add logging
 
     useEffect(() => {
         const fetchRecipe = async () => {
             try {
                 const fetchedRecipe = await getRecipeById(recipeId);
-                console.log('Fetched recipe:', fetchedRecipe);  // Add logging
                 setRecipe(fetchedRecipe);
             } catch (error) {
                 console.error('Error fetching recipe:', error);
@@ -46,7 +45,6 @@ const RecipeScreen: React.FC = () => {
                     <Image source={{ uri: recipe.image }} style={styles.image} />
                 )}
                 <Text style={styles.title}>{recipe.title}</Text>
-                <Text style={styles.description}>{recipe.description}</Text>
                 <View style={styles.nutritionContainer}>
                     <Text style={styles.nutritionTitle}>Nutrition Facts</Text>
                     {recipe.nutrition && (
@@ -61,7 +59,7 @@ const RecipeScreen: React.FC = () => {
                 <View style={styles.ingredientsContainer}>
                     <Text style={styles.ingredientsTitle}>Ingredients</Text>
                     {recipe.ingredients && recipe.ingredients.map((ingredient, index) => (
-                        <Text key={index} style={styles.ingredientText}>{ingredient.name} - {ingredient.amount}</Text>
+                        <Text key={index} style={styles.ingredientText}>{ingredient.name} - {ingredient.amount} {ingredient.unit}</Text>
                     ))}
                 </View>
                 <View style={styles.instructionsContainer}>
@@ -91,12 +89,6 @@ const styles = StyleSheet.create({
         fontSize: FontSize.large,
         fontWeight: 'bold',
         marginBottom: Spacing,
-        textAlign: 'center',
-        color: Colors.text,
-    },
-    description: {
-        fontSize: FontSize.medium,
-        marginBottom: Spacing * 2,
         textAlign: 'center',
         color: Colors.text,
     },
