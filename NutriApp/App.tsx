@@ -4,6 +4,9 @@ import Navigation from '@/routers/navigators';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {Amplify} from 'aws-amplify';
 import awsconfig from './src/aws-exports'; 
+import { ActivityIndicator } from 'react-native';
+import { useEffect, useState } from 'react';
+import Font from "./constants/Font"
 
 Amplify.configure(awsconfig);
 
@@ -11,12 +14,17 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
 
+  
   return (
     <SafeAreaProvider>
       <Navigation/>
     </SafeAreaProvider>
       
   );
+}
+
+function useFonts() {
+  throw new Error('Function not implemented.');
 }
 /*
         <Tab.Navigator

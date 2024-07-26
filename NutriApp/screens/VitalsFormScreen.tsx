@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView, Alert, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
 import Spacing from '@/constants/Spacing';
@@ -111,102 +111,102 @@ const VitalsFormScreen = () => {
     }
   };
 
+  const renderItem = ({ item }) => (
+    <View style={styles.selectedItem}>
+      <Text>{item}</Text>
+      <TouchableOpacity onPress={() => handleRemoveIntolerance(item)}>
+        <Text style={styles.removeItem}>Remove</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>User Name: {userName}</Text>
+      <View style={styles.formGroup}>
+        <Text style={styles.label}>User Name: {userName}</Text>
 
-          <Text style={styles.label}>Weight</Text>
-          <TextInput
-            style={styles.input}
-            value={weight}
-            onChangeText={setWeight}
-            placeholder="Enter your weight"
-            keyboardType="numeric"
-          />
+        <Text style={styles.label}>Weight</Text>
+        <TextInput
+          style={styles.input}
+          value={weight}
+          onChangeText={setWeight}
+          placeholder="Enter your weight"
+          keyboardType="numeric"
+        />
 
-          <Text style={styles.label}>Height</Text>
-          <TextInput
-            style={styles.input}
-            value={height}
-            onChangeText={setHeight}
-            placeholder="Enter your height"
-            keyboardType="numeric"
-          />
+        <Text style={styles.label}>Height</Text>
+        <TextInput
+          style={styles.input}
+          value={height}
+          onChangeText={setHeight}
+          placeholder="Enter your height"
+          keyboardType="numeric"
+        />
 
-          <Text style={styles.label}>BMI: {bmi}</Text>
-          <TextInput
-            style={styles.input}
-            value={bmi}
-            onChangeText={setBmi}
-            placeholder="Enter your BMI"
-            keyboardType="numeric"
-          />
+        <Text style={styles.label}>BMI: {bmi}</Text>
+        <TextInput
+          style={styles.input}
+          value={bmi}
+          onChangeText={setBmi}
+          placeholder="Enter your BMI"
+          keyboardType="numeric"
+        />
 
-          <Text style={styles.label}>Intolerances</Text>
-          <RNPickerSelect
-            onValueChange={handleAddIntolerance}
-            items={intoleranceItems}
-            style={pickerSelectStyles}
-            placeholder={{ label: "Select an option", value: null }}
-          />
-          <FlatList
-            data={intolerances}
-            renderItem={({ item }) => (
-              <View style={styles.selectedItem}>
-                <Text>{item}</Text>
-                <TouchableOpacity onPress={() => handleRemoveIntolerance(item)}>
-                  <Text style={styles.removeItem}>Remove</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
+        <Text style={styles.label}>Intolerances</Text>
+        <RNPickerSelect
+          onValueChange={handleAddIntolerance}
+          items={intoleranceItems}
+          style={pickerSelectStyles}
+          placeholder={{ label: "Select an option", value: null }}
+        />
+        <FlatList
+          data={intolerances}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
 
-          <Text style={styles.label}>Chronic Diseases</Text>
-          <RNPickerSelect
-            onValueChange={handleAddChronicDisease}
-            items={chronicDiseasesItems}
-            style={pickerSelectStyles}
-            placeholder={{ label: "Select an option", value: null }}
-          />
-          <FlatList
-            data={chronicDiseases}
-            renderItem={({ item }) => (
-              <View style={styles.selectedItem}>
-                <Text>{item}</Text>
-                <TouchableOpacity onPress={() => handleRemoveChronicDisease(item)}>
-                  <Text style={styles.removeItem}>Remove</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
+        <Text style={styles.label}>Chronic Diseases</Text>
+        <RNPickerSelect
+          onValueChange={handleAddChronicDisease}
+          items={chronicDiseasesItems}
+          style={pickerSelectStyles}
+          placeholder={{ label: "Select an option", value: null }}
+        />
+        <FlatList
+          data={chronicDiseases}
+          renderItem={({ item }) => (
+            <View style={styles.selectedItem}>
+              <Text>{item}</Text>
+              <TouchableOpacity onPress={() => handleRemoveChronicDisease(item)}>
+                <Text style={styles.removeItem}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
 
-          <Text style={styles.label}>Diet</Text>
-          <RNPickerSelect
-            onValueChange={handleAddDiet}
-            items={dietItems}
-            style={pickerSelectStyles}
-            placeholder={{ label: "Select an option", value: null }}
-          />
-          <FlatList
-            data={diet}
-            renderItem={({ item }) => (
-              <View style={styles.selectedItem}>
-                <Text>{item}</Text>
-                <TouchableOpacity onPress={() => handleRemoveDiet(item)}>
-                  <Text style={styles.removeItem}>Remove</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
+        <Text style={styles.label}>Diet</Text>
+        <RNPickerSelect
+          onValueChange={handleAddDiet}
+          items={dietItems}
+          style={pickerSelectStyles}
+          placeholder={{ label: "Select an option", value: null }}
+        />
+        <FlatList
+          data={diet}
+          renderItem={({ item }) => (
+            <View style={styles.selectedItem}>
+              <Text>{item}</Text>
+              <TouchableOpacity onPress={() => handleRemoveDiet(item)}>
+                <Text style={styles.removeItem}>Remove</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
 
-          <Button title="Submit" onPress={handleSubmit} />
-        </View>
-      </ScrollView>
+      <Button title="Submit" onPress={handleSubmit} />
     </SafeAreaView>
   );
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, ScrollView, Text, View } from 'react-native';
+import { Button, Dimensions, ScrollView, Text, View, StyleSheet } from 'react-native';
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,11 +17,12 @@ import axios from "axios";
 import { RootStackParamList } from "@/types";
 import { fetchUserAttributes, signOut } from '@aws-amplify/auth';
 import Spacing from '@/constants/Spacing';
-import RenderHtml from "react-native-render-html"
-import {BarChart, LineChart} from "react-native-gifted-charts";
+import RenderHtml from "react-native-render-html";
+import { BarChart, LineChart } from "react-native-gifted-charts";
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
+const { height, width } = Dimensions.get("window");
 
 type Props = NativeStackScreenProps<RootStackParamList, "Home">;
 
@@ -30,20 +31,21 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
     const [info, setInfo] = useState<any>(null);
     const { username: initialUsername } = route.params || {};
     const [userName, setUsername] = useState(initialUsername || '');
-    const lineData = [{value: 0},{value: 20},{value: 18},{value: 40},{value: 36},{value: 60},{value: 54},{value: 85}]
+    const lineData = [{ value: 0 }, { value: 20 }, { value: 18 }, { value: 40 }, { value: 36 }, { value: 60 }, { value: 54 }, { value: 85 }];
+
     useEffect(() => {
-      currentAuthenticatedUser();
+        currentAuthenticatedUser();
     }, []);
 
     const currentAuthenticatedUser = async () => {
-      try {
-        const user = await fetchUserAttributes();
-        const username = user.name;
-        setUsername(username);
-        console.log(`The username: ${username}`);
-      } catch (err) {
-        console.log(err);
-      }
+        try {
+            const user = await fetchUserAttributes();
+            const username = user.name;
+            setUsername(username);
+            console.log(`The username: ${username}`);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     useEffect(() => {
@@ -51,7 +53,7 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
             const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search';
             try {
                 const response = await axios.post(lambdaApiUrl, { userName });
-                console.log('API response:', response.data);   
+                console.log('API response:', response.data);
 
                 if (response.data) {
                     setRecipe(response.data);
@@ -89,8 +91,8 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
     }, [userName]);
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <ScrollView>
+        <SafeAreaView style={{ padding: Spacing, flex: 1 }}>
+            <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
                 <LineChart
                     initialSpacing={0}
                     data={lineData}
@@ -104,23 +106,73 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
                     verticalLinesColor="rgba(14,164,164,0.5)"
                     xAxisColor="#0BA5A4"
                     color="#0BA5A4"
+                    containerStyle={{ marginBottom: Spacing * 2 }}
                 />
                 {recipe ? (
-                    <View style={{ padding: Spacing }}>
-                        <Text style={{ padding: Spacing * 4, marginVertical: Spacing, textAlign: "center", justifyContent: "center", fontSize: FontSize.medium }}>{recipe.title}</Text>
-                        <RenderHtml contentWidth={100} source={{ html: recipe.instructions }} />
-                        <Text style={{ padding: Spacing * 4, marginVertical: Spacing, textAlign: "center", justifyContent: "center", fontSize: FontSize.medium }}>{JSON.stringify(info)}</Text>
+                    <View style={styles.recipeContainer}>
+                        <Text style={styles.welcomeText}>Welcome {userName} here is a daily recipe:</Text>
+                        <Text style={styles.recipeTitle}>{recipe.title}</Text>
+                        <RenderHtml contentWidth={width - Spacing * 4} source={{ html: recipe.instructions }} />
+                        <Text style={styles.infoText}>{JSON.stringify(info)}</Text>
                     </View>
-
                 ) : (
-                    <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: FontSize.medium }}>No recipe available</Text>
+                    <Text style={styles.noVitalsText}>No vitals found for the user.</Text>
                 )}
             </ScrollView>
-            <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: FontSize.medium }}>Coming Soon..</Text>
+            <Text style={styles.comingSoonText}>Coming Soon..</Text>
         </SafeAreaView>
     );
-}
+};
 
+const styles = StyleSheet.create({
+    recipeContainer: {
+        padding: Spacing,
+        borderWidth: 1,
+        width: width - Spacing * 2,
+        borderRadius: 20,
+        borderColor: Colors.gray,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5, // for android
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: Spacing * 2,
+    },
+    welcomeText: {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: FontSize.medium,
+        marginBottom: Spacing,
+    },
+    recipeTitle: {
+        padding: Spacing,
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: FontSize.medium,
+        marginBottom: Spacing,
+    },
+    infoText: {
+        padding: Spacing,
+        textAlign: "center",
+        fontSize: FontSize.medium,
+        marginTop: Spacing,
+    },
+    noVitalsText: {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: FontSize.medium,
+        marginTop: Spacing * 2,
+    },
+    comingSoonText: {
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: FontSize.medium,
+        marginTop: Spacing * 2,
+    },
+});
 
 function HomeTabs() {
     const navigation = useNavigation();
