@@ -8,26 +8,25 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/types'
 import { Color } from 'aws-cdk-lib/aws-cloudwatch'
 import axios from 'axios'
+import { fetchUserAttributes } from '@aws-amplify/auth'
 
 
 const {height} = Dimensions.get("window");
 type Props = NativeStackScreenProps<RootStackParamList, "Recipes">;
 
 
-const RecipeShort = ({ onPress, title }: { onPress: () => void; title: string }) => (
+const RecipeShort = ({ onPress, title, img }: { onPress: () => void; title: string; img: string }) => (
   <TouchableOpacity onPress={onPress}>
     <View style={styles.recipeShortContainer}>
       <Text style={{ color: Colors.text, fontSize: FontSize.medium }}>{title}</Text>
       <ImageBackground 
-              style={{
-                  height: height / 8,
-                  right: 0,
-              }}
-              resizeMode="contain"
-              
-              source={require("../assets/images/adaptive-icon.png")}
+        style={{
+          height: height / 8,
+          right: 0,
+        }}
+        resizeMode="contain"
+        source={{ uri: img }}
       />
-
     </View>
   </TouchableOpacity>
 );
@@ -51,12 +50,50 @@ const styles = {
 const RecipesScreen: React.FC<Props> = ({route, navigation: { navigate } }) => {
   const { username: initialUsername} = route.params || {};
   const [userName, setUsername] = useState(initialUsername || '');
+  const [info, setInfo] = useState<any>(null);
   
   const [recipes, setRecipes] = useState<any[]>([]);
 
 
+  useEffect(() => {
+    currentAuthenticatedUser();
+}, []);
+
+const currentAuthenticatedUser = async () => {
+    try {
+        const user = await fetchUserAttributes();
+        const username = user.name;
+        setUsername(username);
+        console.log(`The username: ${username}`);
+    } catch (err) {
+        console.log(err);
+    }
+  };
 
 
+  useEffect(() => {
+    const fetchRecipe = async () => {
+        const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search';
+        try {
+            const response = await axios.post(lambdaApiUrl, { userName });
+            console.log('API response:', response.data);
+
+            if (response.data) {
+                setRecipes(response.data);
+                console.log("The API username: ", userName);
+                console.log("The API data: ", response.data);
+            } else {
+                console.error('API response is empty:', response.data);
+            }
+        } catch (error) {
+            console.error('Error fetching recipe:', error);
+        }
+    };
+
+    if (userName) {
+        fetchRecipe();
+    }
+  }, [userName]);
 
   return (
     <SafeAreaView style={{ flex: 1, padding: Spacing }}>
@@ -80,7 +117,8 @@ const RecipesScreen: React.FC<Props> = ({route, navigation: { navigate } }) => {
           <RecipeShort
             key={i}
             onPress={() => navigate('Recipe')}
-            title={`Recipe ${i + 1}`}
+            title={recipes[i]?.title || 'Recipe'}
+            img={recipes[i]?.image || 'https://via.placeholder.com/150'}
           />
         ))}
 

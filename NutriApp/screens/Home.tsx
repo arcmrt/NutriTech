@@ -49,31 +49,6 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
     };
 
     useEffect(() => {
-        const fetchRecipe = async () => {
-            const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search';
-            try {
-                const response = await axios.post(lambdaApiUrl, { userName });
-                console.log('API response:', response.data);
-
-                if (response.data) {
-                    setRecipe(response.data);
-                    console.log("The API username: ", userName);
-                } else {
-                    console.error('API response is empty:', response.data);
-                    setRecipe(null);
-                }
-            } catch (error) {
-                console.error('Error fetching recipe:', error);
-                setRecipe(null);
-            }
-        };
-
-        if (userName) {
-            fetchRecipe();
-        }
-    }, [userName]);
-
-    useEffect(() => {
         const API_URL = 'https://uvz80evw9b.execute-api.eu-west-1.amazonaws.com/prod/getVitals';
         const getUserInfo = async () => {
             try {

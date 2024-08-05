@@ -79,7 +79,7 @@ const LoginScreen:React.FC<Props> = ({navigation: {navigate}}) => {
               color: Colors.blue,
               borderRadius: 10,
               
-            }}>Login Below</Text>
+            }}>Login</Text>
             <Text style={{
               fontSize: FontSize.large,
               fontWeight: "bold",
