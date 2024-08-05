@@ -123,14 +123,12 @@ const VitalsFormScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.formGroup}>
-        <Text style={styles.label}>User Name: {userName}</Text>
-
         <Text style={styles.label}>Weight</Text>
         <TextInput
           style={styles.input}
           value={weight}
           onChangeText={setWeight}
-          placeholder="Enter your weight"
+          placeholder="Enter your weight in kilograms"
           keyboardType="numeric"
         />
 
@@ -139,7 +137,7 @@ const VitalsFormScreen = () => {
           style={styles.input}
           value={height}
           onChangeText={setHeight}
-          placeholder="Enter your height"
+          placeholder="Enter your height in centimeters"
           keyboardType="numeric"
         />
 
@@ -218,16 +216,17 @@ const styles = StyleSheet.create({
     padding: Spacing,
   },
   formGroup: {
-    marginBottom: 16,
+    marginBottom: 125,
   },
   label: {
-    fontSize: 18,
+    fontSize: 21,
     marginBottom: 8,
+    fontWeight: 'bold',
   },
   input: {
     fontSize: 16,
     paddingVertical: 12,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 4,
@@ -258,6 +257,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 4,
     color: 'black',
     paddingRight: 30, // to ensure the text is never behind the icon
+    marginBottom: 15,
   },
   inputAndroid: {
     fontSize: 16,
@@ -268,6 +268,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderRadius: 4,
     color: 'black',
     paddingRight: 30, // to ensure the text is never behind the icon
+    marginBottom: 15,
   },
 });
 
