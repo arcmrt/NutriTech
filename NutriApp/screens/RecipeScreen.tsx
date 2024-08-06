@@ -6,29 +6,42 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import Spacing from '@/constants/Spacing';
 import FontSize from '@/constants/FontSize';
 import Colors from '@/constants/colors/Colors';
-import { getRecipeById, Recipe } from '@/recipeClass/recipe';
+import axios from 'axios';
 
-type RecipeScreenRouteProp = RouteProp<{ params: { recipeId: number } }, 'params'>;
+type RecipeScreenRouteProp = RouteProp<{ params: { recipeId: string } }, 'params'>;
 
 const RecipeScreen: React.FC = () => {
-    const [recipe, setRecipe] = useState<Recipe | null>(null);
+    const [recipe, setRecipe] = useState<any>(null);
     const route = useRoute<RecipeScreenRouteProp>();
     const { recipeId } = route.params || {};
 
+
+
+
     useEffect(() => {
-        const fetchRecipe = async () => {
+        const fetchRecipeDetails = async () => {
+            const lambdaApiUrl = 'https://rut5nz58qa.execute-api.eu-west-1.amazonaws.com/dev/simpleRecipe';
             try {
-                const fetchedRecipe = await getRecipeById(recipeId);
-                setRecipe(fetchedRecipe);
+                console.log('Fetching recipe:', recipeId);
+                const response = await axios.post(lambdaApiUrl, { recipeId });
+                if (response.data) {
+                    setRecipe(response.data);
+                    console.log('API response:', response.data);
+
+                } else {
+                    console.error('API response is empty:', response.data);
+                }
             } catch (error) {
                 console.error('Error fetching recipe:', error);
             }
         };
+    
 
-        if (recipeId) {
-            fetchRecipe();
+        if(recipeId) {
+          fetchRecipeDetails()
         }
-    }, [recipeId]);
+    }, [recipeId])
+    
 
     if (!recipe) {
         return (

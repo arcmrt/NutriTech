@@ -21,6 +21,7 @@ import {signOut} from "@aws-amplify/auth";
 
  const WelcomeScreen:React.FC<Props> = ({navigation:{navigate}}) => {
 
+    /**
     useEffect(() => {
         handleSignOut();
       }, []);
@@ -33,6 +34,7 @@ import {signOut} from "@aws-amplify/auth";
              console.log('error signing out: ', error);
          }
      }
+    */
      return (
         <SafeAreaView>
             <View>
