@@ -7,7 +7,11 @@ import { RootStackParamList } from "@/types";
 import Colors from "@/constants/colors/Colors";
 import { getCurrentUser, fetchUserAttributes, signOut } from "aws-amplify/auth";  // Correct import
 import { useNavigation } from "@react-navigation/native";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+;
+
+import { UserProfile } from "@/profileClass/profile";
 
 const { height } = Dimensions.get("window");
 
@@ -15,6 +19,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
 
 const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [username, setUsername] = useState('');
+  const [info, setInfo] = useState<any>(null);
 
   const navigation = useNavigation();
 
@@ -33,6 +38,20 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+        if (username) {
+            const userProfile = new UserProfile();
+            await userProfile.fetchProfile(username);
+            const profile = await userProfile.getProfile();
+            setInfo(profile);
+            console.log('User profile in profile page:', profile);
+        }
+    };
+    fetchData();
+  }, [username]);
+  
+
   async function handleSignOut() {
     try {
       await signOut();
@@ -47,6 +66,33 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
     e.preventDefault();
     navigation.navigate('Welcome');
   };
+
+  const renderDietaryPins = () => {
+    if (info && info.diet && Array.isArray(info.diet)) {
+      const dietaryPreferences = info.diet.flat().filter((preference: any) => preference);
+      return dietaryPreferences.map((preference: string, index: number) => (
+        <View key={index} style={styles.dietaryPin}>
+          {getDietaryIcon(preference)}
+          <Text style={styles.dietaryPinText}>{preference}</Text>
+        </View>
+      ));
+    }
+    return null;
+  };
+  
+
+  const getDietaryIcon = (preference: string) => {
+    switch (preference.toLowerCase()) {
+      case 'vegan':
+        return <MaterialCommunityIcons name="leaf" size={20} color="white" />;
+      case 'gluten-free':
+        return <MaterialCommunityIcons name="wheat" size={20} color="white" />;
+      default:
+        return <Ionicons name="help-circle-outline" size={20} color="white" />;
+    }
+  };
+  
+  
 
   return (
     <SafeAreaView>
@@ -68,7 +114,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
             alignItems: 'center',
           }}
         >
-          <View style={{ alignItems: 'center' }}>
+          <View style={{ alignItems: 'center', marginTop: Spacing * 2}}>
             <Ionicons
               name="person-circle-outline"
               size={height / 8}
@@ -84,6 +130,9 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
             >
               {username}
             </Text>
+            <View style={styles.dietaryPinsContainer}>
+              {renderDietaryPins()}
+            </View>
           </View>
         </View>
         <View>
@@ -186,5 +235,30 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
     </SafeAreaView>
   );
 };
+const styles = {
+  dietaryPinsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: Spacing * 2,
+    marginBottom: Spacing * 3,
+  },
+  dietaryPin: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: Spacing,
+    borderRadius: 20,
+    backgroundColor: Colors.textGray,
+    margin:Spacing / 100,
+    
+  },
+  dietaryPinText: {
+    color: 'white',
+    fontWeight: 'bold',
+    marginLeft: Spacing / 2,
+  },
+};
+
+
 
 export default ProfileScreen;

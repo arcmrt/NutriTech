@@ -20,6 +20,10 @@ import Spacing from '@/constants/Spacing';
 import RenderHtml from "react-native-render-html";
 import { BarChart, LineChart } from "react-native-gifted-charts";
 
+import {UserProfile} from "@/profileClass/profile";
+
+
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 const { height, width } = Dimensions.get("window");
@@ -48,22 +52,22 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
         }
     };
 
+
     useEffect(() => {
-        const API_URL = 'https://uvz80evw9b.execute-api.eu-west-1.amazonaws.com/prod/getVitals';
-        const getUserInfo = async () => {
-            try {
-                const response = await axios.post(API_URL, { userName });
-                console.log('User info: ', response.data);
-                setInfo(response.data);
-            } catch (error) {
-                console.error('Error fetching user info:', error);
-                setInfo(null);
+        const fetchData = async () => {
+            if (userName) {
+                const userProfile = new UserProfile();
+                await userProfile.fetchProfile(userName);
+                const profile = await userProfile.getProfile();
+                setInfo(profile);
+                //console.log('User profile:', profile);
             }
         };
-        if (userName) {
-            getUserInfo();
-        }
+        fetchData();
     }, [userName]);
+    
+
+
 
     return (
         <SafeAreaView style={{ padding: Spacing, flex: 1 }}>
@@ -88,11 +92,11 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
                         <Text style={styles.welcomeText}>Welcome {userName} here is a daily recipe:</Text>
                         <Text style={styles.recipeTitle}>{recipe.title}</Text>
                         <RenderHtml contentWidth={width - Spacing * 4} source={{ html: recipe.instructions }} />
-                        <Text style={styles.infoText}>{JSON.stringify(info)}</Text>
                     </View>
                 ) : (
                     <Text style={styles.noVitalsText}>No vitals found for the user.</Text>
                 )}
+                <Text style={styles.infoText}>{JSON.stringify(info)}</Text>
             </ScrollView>
             <Text style={styles.comingSoonText}>Coming Soon..</Text>
         </SafeAreaView>

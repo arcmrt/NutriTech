@@ -6,9 +6,13 @@ export const Colors = {
     darkText: "#626262",
     text: "#000",
     borderWithOpacity: "#1f41bb", //check later
-    gray: "#ECECEC",
+    lightgray: "#ECECEC",
     darkblue: "#0b5394",
     textGray: "#8C8C8C",
+    card: "#F6F6F6",
+    background: "#ECECEC",
+    gray: "#dcdee0",
+    
 }
 
 export default Colors;

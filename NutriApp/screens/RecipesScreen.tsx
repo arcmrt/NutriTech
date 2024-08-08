@@ -107,6 +107,7 @@ const RecipesScreen: React.FC<Props> = ({ route, navigation: { navigate } }) => 
       </Text>
       
       <Animated.FlatList
+        showsVerticalScrollIndicator={false}
         data={recipes}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
@@ -128,7 +129,7 @@ const RecipesScreen: React.FC<Props> = ({ route, navigation: { navigate } }) => 
             -1,
             0,
             ITEM_SIZE * index,
-            ITEM_SIZE * (index + 1)
+            ITEM_SIZE * (index + 1.1)
           ];
 
           const opacity = scrollY.interpolate({

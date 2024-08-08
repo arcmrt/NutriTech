@@ -4,6 +4,7 @@
  */
 
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { UserProfile, UserInfo } from "./profileClass/profile";
 
 declare global {
   namespace ReactNavigation {
@@ -18,7 +19,7 @@ export type RootStackParamList = {
   VerifyScreen: { username: string };
   Home:{username: string};
   VitalsForm:{username: string};
-  Profile:{username: string};
+  Profile:{username: string, profile: UserInfo};
   Details:{username: string};
   Settings:{username: string};
   Recipes: {username: string};
