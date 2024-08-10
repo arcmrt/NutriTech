@@ -18,6 +18,26 @@ const VitalsFormScreen = () => {
     currentAuthenticatedUser();
   }, []);
 
+  useEffect(() => {
+    // Convert weight and height to numerical values
+    const weightNum = parseFloat(weight);
+    const heightNum = parseFloat(height);
+
+    // Check for valid inputs
+    if (weightNum > 0 && heightNum > 0) {
+      // Convert height from centimeters to meters
+      const heightInMeters = heightNum / 100;
+
+      // Calculate BMI
+      const bmiValue = weightNum / (heightInMeters ** 2);
+
+      // Round BMI to two decimal places and update state
+      setBmi(bmiValue.toFixed(1));
+    } else {
+      setBmi(null);
+    }
+  }, [weight, height]);
+
   const currentAuthenticatedUser = async () => {
     try {
       const user = await fetchUserAttributes();
@@ -141,14 +161,7 @@ const VitalsFormScreen = () => {
           keyboardType="numeric"
         />
 
-        <Text style={styles.label}>BMI: {bmi}</Text>
-        <TextInput
-          style={styles.input}
-          value={bmi}
-          onChangeText={setBmi}
-          placeholder="Enter your BMI"
-          keyboardType="numeric"
-        />
+        <Text style={styles.label}>BMI: {bmi ? (<Text style={styles.label}>{bmi}</Text>) : (<Text>Please enter valid weight and height.</Text>)}</Text>
 
         <Text style={styles.label}>Intolerances</Text>
         <RNPickerSelect
