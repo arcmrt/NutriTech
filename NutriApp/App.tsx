@@ -4,7 +4,7 @@ import Navigation from '@/routers/navigators';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {Amplify} from 'aws-amplify';
 import awsconfig from './src/aws-exports'; 
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, StatusBar } from 'react-native';
 import { useEffect, useState } from 'react';
 import Font from "./constants/Font"
 
@@ -16,8 +16,9 @@ export default function App() {
 
   
   return (
-    <SafeAreaProvider>
-      <Navigation/>
+    <SafeAreaProvider >
+      <StatusBar translucent backgroundColor="transparent"/>
+      <Navigation />
     </SafeAreaProvider>
       
   );

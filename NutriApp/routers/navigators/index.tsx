@@ -56,7 +56,7 @@ function RootNavigator() {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Details" component={DetailsScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: true}} />
-      <Stack.Screen name="Recipes" component={RecipesScreen}/>
+      <Stack.Screen name="Recipes" component={RecipesScreen} options={{headerShown:true, headerTitle:"", headerTransparent:true}}/>
       <Stack.Screen name="Recipe" component={RecipeScreen} options={{headerShown:true, headerTitle:"",headerTransparent:true}}/>
     </Stack.Navigator>
   );

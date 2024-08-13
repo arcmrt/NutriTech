@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Alert, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import RNPickerSelect from 'react-native-picker-select';
 import Spacing from '@/constants/Spacing';
 import { fetchUserAttributes } from '@aws-amplify/auth';
+import axios from 'axios';
 
 const VitalsFormScreen = () => {
   const [userName, setUsername] = useState('');
@@ -100,6 +101,33 @@ const VitalsFormScreen = () => {
     setDiet(diet.filter(item => item !== value));
   };
 
+  const getVitals = async (userName: string) => {
+    const lambdaApiUrl = 'https://uvz80evw9b.execute-api.eu-west-1.amazonaws.com/prod/getVitals';
+    try {
+      const res = await axios.post(lambdaApiUrl, { userName });
+  
+      const data = res.data;  
+      
+      if (res.status === 200) {
+        setWeight(data["Body Vitals"][0].weight);
+        setHeight(data["Body Vitals"][0].height);
+        setIntolerances(data.intolerances);
+        setChronicDiseases(data.chronicDiseases);
+        setDiet(data.diet);
+        console.log('User vitals:', data);
+      } else {
+        Alert.alert('Error', `Failed to fetch user vitals: ${data.message}`);
+      }
+    } catch (error: any) {
+      Alert.alert('Error', `Failed to fetch user vitals: ${error.message}`);
+    }
+  }
+  
+  useEffect(() => {
+    getVitals(userName);
+  }, []);
+
+
   const handleSubmit = async () => {
     const payload = {
       userName,
@@ -142,82 +170,84 @@ const VitalsFormScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.formGroup}>
-        <Text style={styles.label}>Weight</Text>
-        <TextInput
-          style={styles.input}
-          value={weight}
-          onChangeText={setWeight}
-          placeholder="Enter your weight in kilograms"
-          keyboardType="numeric"
-        />
+      <ScrollView>
+        <View style={styles.formGroup}>
+          <Text style={styles.label}>Weight</Text>
+          <TextInput
+            style={styles.input}
+            value={weight}
+            onChangeText={setWeight}
+            placeholder="Enter your weight in kilograms"
+            keyboardType="numeric"
+          />
 
-        <Text style={styles.label}>Height</Text>
-        <TextInput
-          style={styles.input}
-          value={height}
-          onChangeText={setHeight}
-          placeholder="Enter your height in centimeters"
-          keyboardType="numeric"
-        />
+          <Text style={styles.label}>Height</Text>
+          <TextInput
+            style={styles.input}
+            value={height}
+            onChangeText={setHeight}
+            placeholder="Enter your height in centimeters"
+            keyboardType="numeric"
+          />
 
-        <Text style={styles.label}>BMI: {bmi ? (<Text style={styles.label}>{bmi}</Text>) : (<Text>Please enter valid weight and height.</Text>)}</Text>
+          <Text style={styles.label}>BMI: {bmi ? (<Text style={styles.label}>{bmi}</Text>) : (<Text>Please enter valid weight and height.</Text>)}</Text>
 
-        <Text style={styles.label}>Intolerances</Text>
-        <RNPickerSelect
-          onValueChange={handleAddIntolerance}
-          items={intoleranceItems}
-          style={pickerSelectStyles}
-          placeholder={{ label: "Select an option", value: null }}
-        />
-        <FlatList
-          data={intolerances}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-        />
+          <Text style={styles.label}>Intolerances</Text>
+          <RNPickerSelect
+            onValueChange={handleAddIntolerance}
+            items={intoleranceItems}
+            style={pickerSelectStyles}
+            placeholder={{ label: "Select an option", value: null }}
+          />
+          <FlatList
+            data={intolerances}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
 
-        <Text style={styles.label}>Chronic Diseases</Text>
-        <RNPickerSelect
-          onValueChange={handleAddChronicDisease}
-          items={chronicDiseasesItems}
-          style={pickerSelectStyles}
-          placeholder={{ label: "Select an option", value: null }}
-        />
-        <FlatList
-          data={chronicDiseases}
-          renderItem={({ item }) => (
-            <View style={styles.selectedItem}>
-              <Text>{item}</Text>
-              <TouchableOpacity onPress={() => handleRemoveChronicDisease(item)}>
-                <Text style={styles.removeItem}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
+          <Text style={styles.label}>Chronic Diseases</Text>
+          <RNPickerSelect
+            onValueChange={handleAddChronicDisease}
+            items={chronicDiseasesItems}
+            style={pickerSelectStyles}
+            placeholder={{ label: "Select an option", value: null }}
+          />
+          <FlatList
+            data={chronicDiseases}
+            renderItem={({ item }) => (
+              <View style={styles.selectedItem}>
+                <Text>{item}</Text>
+                <TouchableOpacity onPress={() => handleRemoveChronicDisease(item)}>
+                  <Text style={styles.removeItem}>Remove</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
 
-        <Text style={styles.label}>Diet</Text>
-        <RNPickerSelect
-          onValueChange={handleAddDiet}
-          items={dietItems}
-          style={pickerSelectStyles}
-          placeholder={{ label: "Select an option", value: null }}
-        />
-        <FlatList
-          data={diet}
-          renderItem={({ item }) => (
-            <View style={styles.selectedItem}>
-              <Text>{item}</Text>
-              <TouchableOpacity onPress={() => handleRemoveDiet(item)}>
-                <Text style={styles.removeItem}>Remove</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </View>
+          <Text style={styles.label}>Diet</Text>
+          <RNPickerSelect
+            onValueChange={handleAddDiet}
+            items={dietItems}
+            style={pickerSelectStyles}
+            placeholder={{ label: "Select an option", value: null }}
+          />
+          <FlatList
+            data={diet}
+            renderItem={({ item }) => (
+              <View style={styles.selectedItem}>
+                <Text>{item}</Text>
+                <TouchableOpacity onPress={() => handleRemoveDiet(item)}>
+                  <Text style={styles.removeItem}>Remove</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
 
-      <Button title="Submit" onPress={handleSubmit} />
+        <Button title="Submit" onPress={handleSubmit} />
+      </ScrollView>
     </SafeAreaView>
   );
 };

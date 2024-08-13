@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import Spacing from '@/constants/Spacing';
@@ -9,22 +9,30 @@ import Colors from '@/constants/colors/Colors';
 import axios from 'axios';
 import RenderHtml from "react-native-render-html";
 import { useHeaderHeight } from '@react-navigation/elements';
-type RecipeScreenRouteProp = RouteProp<{ params: { recipeId: string } }, 'params'>;
+
+import AnimatedBoxes from './animationTest';
+
+import gradient from "@/assets/images/gradient_1080_1920(blue).png";
+
+type RecipeScreenRouteProp = RouteProp<{ params: { userName: string, recipeId: string } }, 'params'>;
 
 const RecipeScreen: React.FC = () => {
     const [recipe, setRecipe] = useState<any>(null);
     const route = useRoute<RecipeScreenRouteProp>();
     const { recipeId } = route.params || {};
+    const { userName } = route.params || {};
 
     const { height, width } = Dimensions.get("window");
     const headerHeight = useHeaderHeight(); 
+
+    const BG_IMAGE = "https://images.pexels.com/photos/4041327/pexels-photo-4041327.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 
     useEffect(() => {
         const fetchRecipeDetails = async () => {
             const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/display';
             try {
                 console.log('Fetching recipe:', recipeId);
-                const response = await axios.post(lambdaApiUrl, { recipeId });
+                const response = await axios.post(lambdaApiUrl, { recipeId, userName });
                 if (response.data) {
                     setRecipe(response.data);
                     console.log('API response:', response.data);
@@ -43,14 +51,22 @@ const RecipeScreen: React.FC = () => {
 
     if (!recipe) {
         return (
-            <SafeAreaView style={styles.container}>
-                <Text style={styles.loadingText}>Loading...</Text>
+            <SafeAreaView style={styles.loadingContainer}>
+                <View style={{ flex: 1, justifyContent: "flex-start" }}>
+                    <AnimatedBoxes/>                
+                </View>
+
             </SafeAreaView>
         );
     }
 
     return (
-        <SafeAreaView style={[styles.container, { paddingTop: headerHeight / 1.8 }]}>
+        <SafeAreaView style={[styles.container, { paddingTop: headerHeight / 1.2 }]}>
+            <Image
+                source={gradient}
+                style={StyleSheet.absoluteFillObject}
+                blurRadius={20}
+            />
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header}>
                     <Image source={{ uri: recipe.image }} style={styles.image} />
@@ -73,7 +89,11 @@ const RecipeScreen: React.FC = () => {
                 </View>
                 <View style={styles.nutritionContainer}>
                     <Text style={[styles.nutritionTitle,{fontWeight:"bold"}]}>Ingredients</Text>
-
+                    {recipe.ingredients.map((ingredient: any) => (
+                        <Text key={ingredient.id} style={styles.nutritionText}>
+                            {ingredient.name} - {ingredient.amount} {ingredient.unit}
+                        </Text>
+                    ))}
                 </View>
                 <View style={styles.instructionsContainer}>
                     <Text style={styles.instructionsTitle}>Recipe</Text>
@@ -176,6 +196,10 @@ const styles = StyleSheet.create({
         fontSize: FontSize.medium,
         textAlign: 'center',
         color: Colors.text,
+    },
+    loadingContainer: {
+        flex: 1,
+        padding: Spacing,
     },
 });
 

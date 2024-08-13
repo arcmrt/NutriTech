@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Dimensions, Text, TouchableOpacity } from "react-native";
+import { View, Dimensions, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import Spacing from "@/constants/Spacing";
@@ -15,6 +15,7 @@ import { UserProfile } from "@/profileClass/profile";
 
 const { height } = Dimensions.get("window");
 
+
 type Props = NativeStackScreenProps<RootStackParamList, "Profile">;
 
 const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
@@ -22,6 +23,8 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   const [info, setInfo] = useState<any>(null);
 
   const navigation = useNavigation();
+
+  const BG_IMAGE= "https://images.pexels.com/photos/5745754/pexels-photo-5745754.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 
   useEffect(() => {
     currentAuthenticatedUser();
@@ -96,6 +99,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
 
   return (
     <SafeAreaView>
+
       <View style={{ padding: Spacing * 2 }}>
         <View
           style={{
