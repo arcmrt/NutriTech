@@ -27,7 +27,6 @@ const RecipeScreen: React.FC = () => {
     const [likesCount, setLikesCount] = useState(recipe?.likes || 0);
 
 
-
     const { height, width } = Dimensions.get("window");
     const headerHeight = useHeaderHeight(); 
 
@@ -35,27 +34,27 @@ const RecipeScreen: React.FC = () => {
 
     useEffect(() => {
         const fetchRecipeSocialDetails = async () => {
-            const fetchRecipeLikeCount = 'https://r8dnbeqvcb.execute-api.eu-west-1.amazonaws.com/dev/like/getRecipeLikeInfo';
-            const fetchRecipeComments = ' https://r8dnbeqvcb.execute-api.eu-west-1.amazonaws.com/dev/comment/add';
+
+            const fetchRecipeComments = ' https://r8dnbeqvcb.execute-api.eu-west-1.amazonaws.com/dev/comment/get';
             try {
                 console.log('Fetching recipe:', recipeId);
     
-                const likeResponse = await axios.post(fetchRecipeLikeCount, { recipeId });
-
-                const commentResponse = await axios.post(fetchRecipeComments, { recipeId });
+                const likeResponse = await axios.post(fetchRecipeComments, { recipeId });
+                console.log(likeResponse.data)
+                //const commentResponse = await axios.post(fetchRecipeComments, { recipeId });
     
                 if (likeResponse) {
-                    setLikesCount(likeResponse.data);
 
+                    setLikesCount(likeResponse.data.likes);
 
                 } else {
                     console.error('API likeResponse is empty:', likeResponse.data);
                 }
 
-                console.log('API commentResponse:', commentResponse.data);
+                //console.log('API commentResponse:', commentResponse.data);
     
             } catch (error) {
-                console.error('Error fetching recipe:', error);
+                console.error('Error fetching recipeLikeCount:', error);
             }
         };
     
@@ -63,6 +62,8 @@ const RecipeScreen: React.FC = () => {
             fetchRecipeSocialDetails();
         }
     }, [recipeId]);
+
+
     useEffect(() => {
         const fetchRecipeDetails = async () => {
             const fetchFromID_api = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/display';
@@ -96,6 +97,33 @@ const RecipeScreen: React.FC = () => {
         }
     }, [recipeId]);
     
+    useEffect(() => {
+        const fetchRecipeDetails = async () => {
+            const checkLikedRecipe_api = 'https://mllvzslr65.execute-api.eu-west-1.amazonaws.com/default/checkLikedRecipe';
+            try {
+                console.log('Fetching recipe:', recipeId);
+                console.log('Fetching recipe:', userName);
+    
+                const checkLikedResponse = await axios.post(checkLikedRecipe_api, { userName, recipeId });
+    
+                if (checkLikedResponse.data) {
+                    setIsLiked(checkLikedResponse.data.liked)
+                    console.log('API checkLiked:', checkLikedResponse.data);
+                } else {
+                    console.error('API IdResponse is empty:', checkLikedResponse.data);
+                }
+
+    
+            } catch (error) {
+                console.error('Error fetching recipe:', error);
+            }
+        };
+    
+        if (userName && recipeId) {
+            fetchRecipeDetails();
+        }
+    }, [userName, recipeId]);
+    
 
     
 
@@ -112,12 +140,10 @@ const RecipeScreen: React.FC = () => {
 
     const handleLikePress = () => {
         if (isLiked) {
-            // If it's already liked, we should unlike it
             dislikeRecipeFunction();
             setIsLiked(false);
             setLikesCount((prevCount: number) => prevCount - 1);
         } else {
-            // If it's not liked yet, we should like it
             likeRecipeFunction();
             setIsLiked(true);
             setLikesCount((prevCount: number) => prevCount + 1);

@@ -1,4 +1,4 @@
-import { View, Text, FlatList, ActivityIndicator, StyleSheet, Animated, TouchableOpacity, ImageBackground, Dimensions, Image} from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, Animated, TouchableOpacity, ImageBackground, Dimensions, Image, Touchable} from 'react-native';
 import React, { useState, useEffect } from 'react';
 import AnimatedBoxes from '../components/animationTest';
 import axios from 'axios';
@@ -92,27 +92,27 @@ const currentAuthenticatedUser = async () => {
   }
 
 
-  useEffect(() => {
-    const fetchRecipe = async () => {
-      const lambdaApiUrl = 'https://to3a92d3x3.execute-api.eu-west-1.amazonaws.com/default/bulkRecipwDisplay';
-      try {
-        const response = await axios.post(lambdaApiUrl, { userName });
-        console.log('API response:', response.data);
 
-        if (response.data) {
-          setRecipes(response.data);
-          console.log("The API username: ", userName);
-          console.log("The API data: ", response.data);
-        } else {
-          console.error('API response is empty:', response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching recipe:', error);
+  const fetchRecipe = async () => {
+    const lambdaApiUrl = 'https://to3a92d3x3.execute-api.eu-west-1.amazonaws.com/default/bulkRecipwDisplay';
+    try {
+      const response = await axios.post(lambdaApiUrl, { userName });
+      console.log('API response:', response.data);
+
+      if (response.data) {
+        setRecipes(response.data);
+        console.log("The API username: ", userName);
+        console.log("The API data: ", response.data);
+      } else {
+        console.error('API response is empty:', response.data);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching recipe:', error);
+    }
+  };
 
+  useEffect(() => {
     if (userName) {
-      
       fetchRecipe();
     }
   }, [userName]);
@@ -141,12 +141,15 @@ const currentAuthenticatedUser = async () => {
       />
 
       <Text style={{ textAlign: "center", fontWeight: "bold", fontSize: FontSize.medium }}>
-        Recipes that are suitable for your diet
+        Recipes that you liked.
       </Text>
       <Text style={{ textAlign: "center", fontSize: FontSize.small, marginTop: 5, color: Colors.textGray }}>
-        You can choose various delicious options from various amounts of recipes that lie below.
+        Your favorite recipes are just a click away, making meal planning a breeze.
       </Text>
-    
+      <TouchableOpacity style={styles.refreshButton} onPress={fetchRecipe}>
+        <Text style={styles.refreshButtonText} >Refresh</Text>
+      </TouchableOpacity>
+
       <Animated.FlatList
         showsVerticalScrollIndicator={false}
         data={recipes}
@@ -239,6 +242,18 @@ const styles = StyleSheet.create({
     color: '#333',
     fontSize: 16, 
     fontWeight: 'bold', 
+  },
+  refreshButton: {
+    backgroundColor: Colors.red,
+    padding: Spacing,
+    borderRadius: 8,
+    marginTop: Spacing,
+    opacity: .75,
+  },
+  refreshButtonText: {
+    color: Colors.light,
+    fontSize: FontSize.medium,
+    textAlign: 'center',
   },
 });
 

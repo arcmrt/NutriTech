@@ -73,6 +73,17 @@ const styles = StyleSheet.create({
     fontSize: 16, 
     fontWeight: 'bold', 
   },
+  refreshButton: {
+    backgroundColor: Colors.blue,
+    padding: Spacing,
+    borderRadius: 8,
+    marginTop: Spacing,
+  },
+  refreshButtonText: {
+    color: Colors.light,
+    fontSize: FontSize.medium,
+    textAlign: 'center',
+  },
 });
 
 const RecipesScreen: React.FC<Props> = ({ route, navigation: { navigate } }) => {
@@ -100,25 +111,25 @@ const RecipesScreen: React.FC<Props> = ({ route, navigation: { navigate } }) => 
     }
   };
 
-  useEffect(() => {
-    const fetchRecipe = async () => {
-      const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search';
-      try {
-        const response = await axios.post(lambdaApiUrl, { userName });
-        console.log('API response:', response.data);
+  const fetchRecipe = async () => {
+    const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/search';
+    try {
+      const response = await axios.post(lambdaApiUrl, { userName });
+      console.log('API response:', response.data);
 
-        if (response.data) {
-          setRecipes(response.data);
-          console.log("The API username: ", userName);
-          console.log("The API data: ", response.data);
-        } else {
-          console.error('API response is empty:', response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching recipe:', error);
+      if (response.data) {
+        setRecipes(response.data);
+        console.log("The API username: ", userName);
+        console.log("The API data: ", response.data);
+      } else {
+        console.error('API response is empty:', response.data);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching recipe:', error);
+    }
+  };
 
+  useEffect(() => {
     if (userName) {
       
       fetchRecipe();
@@ -191,6 +202,10 @@ const RecipesScreen: React.FC<Props> = ({ route, navigation: { navigate } }) => 
     
       <SearchBar onSearch={setSearchText} query={query} />
     
+      <TouchableOpacity style={styles.refreshButton} onPress={fetchRecipe}>
+        <Text style={styles.refreshButtonText} >Refresh</Text>
+      </TouchableOpacity>
+
       <Animated.FlatList
         showsVerticalScrollIndicator={false}
         data={recipes}

@@ -4,13 +4,15 @@ import Navigation from '@/routers/navigators';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {Amplify} from 'aws-amplify';
 import awsconfig from './src/aws-exports'; 
-import { ActivityIndicator, StatusBar } from 'react-native';
+import { ActivityIndicator, LogBox, StatusBar } from 'react-native';
 import { useEffect, useState } from 'react';
 import Font from "./constants/Font"
 
 Amplify.configure(awsconfig);
 
 const Tab = createBottomTabNavigator();
+
+LogBox.ignoreAllLogs();
 
 export default function App() {
 

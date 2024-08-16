@@ -101,6 +101,8 @@ const VitalsFormScreen = () => {
     setDiet(diet.filter(item => item !== value));
   };
 
+  /**
+
   const getVitals = async (userName: string) => {
     const lambdaApiUrl = 'https://uvz80evw9b.execute-api.eu-west-1.amazonaws.com/prod/getVitals';
     try {
@@ -127,6 +129,7 @@ const VitalsFormScreen = () => {
     getVitals(userName);
   }, []);
 
+  */
 
   const handleSubmit = async () => {
     const payload = {
