@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, Dimensions, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, RouteProp } from '@react-navigation/native';
 import Spacing from '@/constants/Spacing';
@@ -10,7 +10,9 @@ import axios from 'axios';
 import RenderHtml from "react-native-render-html";
 import { useHeaderHeight } from '@react-navigation/elements';
 
-import AnimatedBoxes from './animationTest';
+import AnimatedBoxes from '../components/animationTest';
+
+import IonIcons from 'react-native-vector-icons/Ionicons';
 
 import gradient from "@/assets/images/gradient_1080_1920(blue).png";
 
@@ -21,6 +23,10 @@ const RecipeScreen: React.FC = () => {
     const route = useRoute<RecipeScreenRouteProp>();
     const { recipeId } = route.params || {};
     const { userName } = route.params || {};
+    const [isLiked, setIsLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState(recipe?.likes || 0);
+
+
 
     const { height, width } = Dimensions.get("window");
     const headerHeight = useHeaderHeight(); 
@@ -28,26 +34,70 @@ const RecipeScreen: React.FC = () => {
     const BG_IMAGE = "https://images.pexels.com/photos/4041327/pexels-photo-4041327.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 
     useEffect(() => {
-        const fetchRecipeDetails = async () => {
-            const lambdaApiUrl = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/display';
+        const fetchRecipeSocialDetails = async () => {
+            const fetchRecipeLikeCount = 'https://r8dnbeqvcb.execute-api.eu-west-1.amazonaws.com/dev/like/getRecipeLikeInfo';
+            const fetchRecipeComments = ' https://r8dnbeqvcb.execute-api.eu-west-1.amazonaws.com/dev/comment/add';
             try {
                 console.log('Fetching recipe:', recipeId);
-                const response = await axios.post(lambdaApiUrl, { recipeId, userName });
-                if (response.data) {
-                    setRecipe(response.data);
-                    console.log('API response:', response.data);
+    
+                const likeResponse = await axios.post(fetchRecipeLikeCount, { recipeId });
+
+                const commentResponse = await axios.post(fetchRecipeComments, { recipeId });
+    
+                if (likeResponse) {
+                    setLikesCount(likeResponse.data);
+
+
                 } else {
-                    console.error('API response is empty:', response.data);
+                    console.error('API likeResponse is empty:', likeResponse.data);
                 }
+
+                console.log('API commentResponse:', commentResponse.data);
+    
             } catch (error) {
                 console.error('Error fetching recipe:', error);
             }
         };
+    
+        if (recipeId) {
+            fetchRecipeSocialDetails();
+        }
+    }, [recipeId]);
+    useEffect(() => {
+        const fetchRecipeDetails = async () => {
+            const fetchFromID_api = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/display';
+            const fetchSimilarRecipes_api = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/similar';
+            try {
+                console.log('Fetching recipe:', recipeId);
+    
+                const IdResponse = await axios.post(fetchFromID_api, { recipeId, userName });
+    
 
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+
+                // const SimilarResponse = await axios.post(fetchSimilarRecipes_api, { recipeId, userName });
+    
+                if (IdResponse.data) {
+                    setRecipe(IdResponse.data);
+                    console.log('API IdResponse:', IdResponse.data);
+                } else {
+                    console.error('API IdResponse is empty:', IdResponse.data);
+                }
+
+    
+            } catch (error) {
+                console.error('Error fetching recipe:', error);
+            }
+        };
+    
         if (recipeId) {
             fetchRecipeDetails();
         }
     }, [recipeId]);
+    
+
+    
 
     if (!recipe) {
         return (
@@ -60,6 +110,52 @@ const RecipeScreen: React.FC = () => {
         );
     }
 
+    const handleLikePress = () => {
+        if (isLiked) {
+            // If it's already liked, we should unlike it
+            dislikeRecipeFunction();
+            setIsLiked(false);
+            setLikesCount((prevCount: number) => prevCount - 1);
+        } else {
+            // If it's not liked yet, we should like it
+            likeRecipeFunction();
+            setIsLiked(true);
+            setLikesCount((prevCount: number) => prevCount + 1);
+        }
+    };
+    
+    const likeRecipeFunction = async () => {
+        const likeRecipe_api = 'https://r8dnbeqvcb.execute-api.eu-west-1.amazonaws.com/dev/like/likeRecipe';
+        try {
+            console.log('Liking recipe:', userName, recipeId);
+            const likeResponse = await axios.post(likeRecipe_api, { userName, recipeId });
+            if (likeResponse.data) {
+                console.log('API likeResponse:', likeResponse.data);
+            } else {
+                console.error('API likeResponse is empty:', likeResponse.data);
+            }
+        } catch (error) {
+            console.error('Error liking recipe:', error.response ? error.response.data : error.message);
+        }
+    };
+    
+    const dislikeRecipeFunction = async () => {
+        const unlikeRecipe_api = 'https://r8dnbeqvcb.execute-api.eu-west-1.amazonaws.com/dev/like/unlikeRecipe';
+        try {
+            console.log('Disliking recipe:', userName, recipeId);
+            const dislikeResponse = await axios.post(unlikeRecipe_api, { userName, recipeId });
+            if (dislikeResponse.data) {
+                console.log('API dislikeResponse:', dislikeResponse.data);
+            } else {
+                console.error('API dislikeResponse is empty:', dislikeResponse.data);
+            }
+        } catch (error) {
+            console.error('Error disliking recipe:', error.response ? error.response.data : error.message);
+        }
+    };
+    
+    
+
     return (
         <SafeAreaView style={[styles.container, { paddingTop: headerHeight / 1.2 }]}>
             <Image
@@ -70,8 +166,17 @@ const RecipeScreen: React.FC = () => {
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header}>
                     <Image source={{ uri: recipe.image }} style={styles.image} />
-                    <Text style={styles.title}>{recipe.title}</Text>
+                    <View style={styles.headerTextContainer}>
+                        <Text style={styles.title}>{recipe.title}</Text>
+                        <View style={styles.likeContainer}>
+                            <TouchableOpacity onPress={handleLikePress} style={styles.likeButton}>
+                                <IonIcons name={isLiked ? "heart" : "heart-outline"} size={25} color={isLiked ? "red" : "gray"} />
+                                <Text style={styles.likesCount}>{likesCount}</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
+
                 
                 <View style={styles.nutritionContainer}>
                     <Text style={styles.nutritionTitle}>Nutrition Details</Text>
@@ -89,8 +194,8 @@ const RecipeScreen: React.FC = () => {
                 </View>
                 <View style={styles.nutritionContainer}>
                     <Text style={[styles.nutritionTitle,{fontWeight:"bold"}]}>Ingredients</Text>
-                    {recipe.ingredients.map((ingredient: any) => (
-                        <Text key={ingredient.id} style={styles.nutritionText}>
+                    {recipe.ingredients.map((ingredient: { id: any; name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; amount: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; unit: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }, index: any) => (
+                        <Text key={`${ingredient.id}-${index}`} style={styles.nutritionText}>
                             {ingredient.name} - {ingredient.amount} {ingredient.unit}
                         </Text>
                     ))}
@@ -101,7 +206,7 @@ const RecipeScreen: React.FC = () => {
                 </View>
                 <View style={styles.similarRecipesContainer}>
                     <Text style={styles.similarRecipesTitle}>Similar to this..</Text>
-
+                    
                 </View>
 
             </ScrollView>
@@ -200,6 +305,24 @@ const styles = StyleSheet.create({
     loadingContainer: {
         flex: 1,
         padding: Spacing,
+    },
+    headerTextContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flex: 1,
+    },
+    likeButton: {
+        padding: Spacing / 2,
+    },
+    likeContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    likesCount: {
+        marginLeft: 8, // spacing between heart icon and count
+        fontSize: FontSize.medium,
+        color: Colors.text,
     },
 });
 

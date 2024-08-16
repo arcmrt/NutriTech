@@ -118,7 +118,7 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
             alignItems: 'center',
           }}
         >
-          <View style={{ alignItems: 'center', marginTop: Spacing * 2}}>
+          <View>
             <Ionicons
               name="person-circle-outline"
               size={height / 8}
@@ -140,37 +140,6 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
           </View>
         </View>
         <View>
-          <TouchableOpacity
-            onPress={() => navigate("Settings")}
-            style={{
-              flexDirection: "row",
-              marginTop: Spacing * 2,
-              borderColor: Colors.gray,
-            }}
-          >
-            <Ionicons
-              name="settings-outline"
-              size={25}
-              color={Colors.textGray}
-            />
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: 'bold',
-                marginLeft: Spacing,
-              }}
-            >
-              Settings
-            </Text>
-            <Text
-              style={{
-                fontSize: 20,
-                marginLeft: 'auto',
-              }}
-            >
-              {">"}
-            </Text>
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigate("Updating Vitals", { username: username })}
             style={{
@@ -240,6 +209,17 @@ const ProfileScreen: React.FC<Props> = ({ navigation: { navigate } }) => {
   );
 };
 const styles = {
+  container: {
+    paddingTop: Spacing * 2,
+    flex: 1,
+    padding: Spacing * 1.2,
+    backgroundColor: Colors.background,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: Spacing * 2,
+  },
   dietaryPinsContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -262,6 +242,8 @@ const styles = {
     marginLeft: Spacing / 2,
   },
 };
+
+
 
 
 

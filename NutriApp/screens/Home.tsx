@@ -25,7 +25,7 @@ import Linking from "expo";
 
 import {UserProfile} from "@/profileClass/profile";
 import FavoritesScreen from './FavoritesScreen';
-import AnimatedBoxes from './animationTest';
+import AnimatedBoxes from '../components/animationTest';
 
 
 
@@ -57,7 +57,7 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
         }
     };
 
-    const handleLinkPress = (href: string) => {
+    const handleLinkPress = () => {
         navigate("Recipes")
     };
     
@@ -311,66 +311,88 @@ const styles = StyleSheet.create({
         color: Colors.text,
     },
 });
+
 function HomeTabs() {
     const navigation = useNavigation();
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [userName, setUsername] = useState();
 
-    async function handleSignOut() {
+    useEffect(() => {
+        currentAuthenticatedUser();
+    }, []);
+
+    const currentAuthenticatedUser = async () => {
         try {
-            await signOut();
-            console.log('sign out success');
-        } catch (error) {
-            console.log('error signing out: ', error);
+            const user = await fetchUserAttributes();
+            const username = user.name;
+            setUsername(username);
+            console.log(`The a username: ${username}`);
+        } catch (err) {
+            console.log(err);
         }
-    }
-
-    const handleLogoutPress = (e: any) => {
-        handleSignOut();
-        e.preventDefault();
-        navigation.navigate('Welcome');
     };
 
+    
+  
+  
+    async function handleSignOut() {
+      try {
+        await signOut();
+        console.log('sign out success');
+      } catch (error) {
+        console.log('error signing out: ', error);
+      }
+    }
+  
+    const handleLogoutPress = (e: any) => {
+      handleSignOut();
+      e.preventDefault();
+      navigation.navigate('Welcome');
+    };
+  
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: 'transparent' }}>
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => {
-                        let iconTag;
-                        size = 28; 
-
-                        if (route.name === 'Recipes') {
-                            iconTag = focused ? 'pizza' : 'pizza-outline';
-                        } else if (route.name === 'Home') {
-                            iconTag = focused ? 'home' : 'home-outline';
-                        } else if (route.name === 'Profile') {
-                            iconTag = focused ? 'person' : 'person-outline';
-                        } else if (route.name === 'Logout') {
-                            iconTag = focused ? 'log-out' : 'log-out-outline';
-                        } else if (route.name === 'Favorites') {
-                            iconTag = focused ? 'heart' : 'heart-outline';
-                        }
-
-                        return <Ionicons name={iconTag} size={size} color={color} />;
-                    },
-                    tabBarActiveTintColor: Colors.blue,
-                    tabBarInactiveTintColor: Colors.darkText,
-                    tabBarLabelStyle: {
-                        fontSize: 11,  
-                        fontWeight: 'bold',
-                    },
-                    tabBarStyle: homeStyles.tabBarStyle,  
-                    headerShown: false,
-                    animation: 'fade',
-                })}
-            >
-                <Tab.Screen name="Home" component={Home} />
-                <Tab.Screen name="Recipes" component={RecipesScreen} />
-                <Tab.Screen name="Profile" component={ProfileScreen} />
-                <Tab.Screen name="Favorites" component={FavoritesScreen} />
-                <Tab.Screen name="Logout" component={BlankScreen} listeners={{ tabPress: handleLogoutPress }} />
-            </Tab.Navigator>
-        </SafeAreaView>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.light }}>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconTag;
+              size = 28;
+  
+              if (route.name === 'Recipes') {
+                iconTag = focused ? 'pizza' : 'pizza-outline';
+              } else if (route.name === 'Home') {
+                iconTag = focused ? 'home' : 'home-outline';
+              } else if (route.name === 'Profile') {
+                iconTag = focused ? 'person' : 'person-outline';
+              } else if (route.name === 'Logout') {
+                iconTag = focused ? 'log-out' : 'log-out-outline';
+              } else if (route.name === 'Favorites') {
+                iconTag = focused ? 'heart' : 'heart-outline';
+              }
+  
+              return <Ionicons name={iconTag} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: Colors.blue,
+            tabBarInactiveTintColor: Colors.darkText,
+            tabBarLabelStyle: {
+              fontSize: 11,
+              fontWeight: 'bold',
+            },
+            tabBarStyle: homeStyles.tabBarStyle,
+            headerShown: false,
+            animation: 'fade',
+          })}
+        >
+          <Tab.Screen name="Home" component={Home} />
+          <Tab.Screen name="Recipes" component={RecipesScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
+          <Tab.Screen name="Favorites" component={FavoritesScreen}/>
+          <Tab.Screen name="Logout" component={BlankScreen} listeners={{ tabPress: handleLogoutPress }} />
+        </Tab.Navigator>
+      </SafeAreaView>
     );
-}
+  }
+  
 
 const homeStyles = StyleSheet.create({
     tabBarStyle: {

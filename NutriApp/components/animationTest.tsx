@@ -14,12 +14,12 @@ const AnimatedBoxes = () => {
           Animated.sequence([
             Animated.timing(translateYAnim, {
               toValue: 200,
-              duration: 600,
+              duration: 700,
               useNativeDriver: true,
             }),
             Animated.timing(translateYAnim, {
               toValue: 0,
-              duration: 800,
+              duration: 1000,
               useNativeDriver: true,
             }),
           ]),//bounce
@@ -37,12 +37,13 @@ const AnimatedBoxes = () => {
           ]),
           Animated.sequence([
             Animated.timing(scaleAnim, {
-              toValue: 1.2,
+              toValue: 1.7,
               duration: 650,
               useNativeDriver: true,
             }),
             Animated.timing(scaleAnim, {
               toValue: 1,
+              delay: 700,
               duration: 650,
               useNativeDriver: true,
             }),
@@ -121,13 +122,13 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 20,
+    padding: 50,
   },
   box: {
-    width: 50,
-    height: 50,
+    width: 35,
+    height: 35,
     backgroundColor: '#3498db',
-    borderRadius: 12, 
+    borderRadius: 9, 
   },
   box1: {
     backgroundColor: '#808085',

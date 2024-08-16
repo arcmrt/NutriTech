@@ -16,6 +16,7 @@ import SettingsScreen from "@/screens/SettingsScreen";
 import RecipesScreen from "@/screens/RecipesScreen";
 import VerifyScreen from "@/screens/VerifyScreen";
 import VitalsFormScreen from "@/screens/VitalsFormScreen";
+import FavoritesScreen from "@/screens/FavoritesScreen";
 
 
 const theme = {
@@ -58,6 +59,7 @@ function RootNavigator() {
       <Stack.Screen name="Settings" component={SettingsScreen} options={{headerShown: true}} />
       <Stack.Screen name="Recipes" component={RecipesScreen} options={{headerShown:true, headerTitle:"", headerTransparent:true}}/>
       <Stack.Screen name="Recipe" component={RecipeScreen} options={{headerShown:true, headerTitle:"",headerTransparent:true}}/>
+      <Stack.Screen name="Favorites" component={FavoritesScreen}/>
     </Stack.Navigator>
   );
 }

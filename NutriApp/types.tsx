@@ -23,8 +23,8 @@ export type RootStackParamList = {
   Details:{username: string};
   Settings:{username: string};
   Recipes: {username: string};
-  Recipe:{username: string, recipeId: string};
-
+  Recipe:{userName: string, recipeId: string};
+  Favorites:{info: any};
 
   getRecipes:{username: string};
 };

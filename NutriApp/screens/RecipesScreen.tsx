@@ -10,7 +10,7 @@ import axios from 'axios';
 import { fetchUserAttributes } from '@aws-amplify/auth';
 
 import SearchBar from '@/components/searchBar';
-import AnimatedBoxes from './animationTest';
+import AnimatedBoxes from '../components/animationTest';
 import { LinearGradient } from 'react-native-svg';
 
 import gradient from "@/assets/images/gradient_1080_1920.png";
@@ -224,7 +224,7 @@ const RecipesScreen: React.FC<Props> = ({ route, navigation: { navigate } }) => 
     
           return (
             <RecipeShort
-              onPress={() => navigate('Recipe', { username: userName, recipeId: item.id })}
+              onPress={() => navigate('Recipe', { userName: userName, recipeId: item.id })}
               title={item.title || 'Recipe'}
               img={item.image || 'https://via.placeholder.com/150'}
               scale={scale}
