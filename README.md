@@ -22,7 +22,7 @@ Setting up NutriApp is simple! Just follow these steps:
    - Open your terminal or command prompt.
    - Clone the NutriApp repository to your local machine by running:
     
-     git clone [Insert Repository URL Here]
+     git clone [https://github.com/arcmrt/NutriTech.git]
    
 2. **Download the `src` Folder:** 
    - Visit the main drive link [Insert Drive Link Here] to download the `src` folder.
@@ -53,7 +53,7 @@ Setting up NutriApp is simple! Just follow these steps:
    - Follow the on-screen instructions to set up your profile and use NutriApp.
 
 ## Troubleshooting
-If you encounter any issues during installation or while using the app, please contact our support team at [kaan.oguzkan@ug.bilkent.edu.tr]
+If you encounter any issues during installation or while using the app, don't hesitate to get in touch with our support team at [kaan.oguzkan@ug.bilkent.edu.tr]
 
 Thank you for choosing NutriApp! We’re excited to participate in your journey towards better nutrition and a healthier lifestyle.
 
