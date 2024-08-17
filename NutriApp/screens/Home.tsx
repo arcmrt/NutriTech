@@ -119,11 +119,11 @@ const Home: React.FC<Props> = ({ route, navigation: { navigate } }) => {
                 blurRadius={20}
             />
             <View style={styles.titleContainer}>
+            </View>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <Text style={styles.recipeTitle}>
                     Daily Recipe
                 </Text>
-            </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.header}>
                     <Image source={{ uri: recipe.image }} style={styles.image} />
                     <Text style={styles.title}>{recipe.title}</Text>
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
         padding: Spacing,
         textAlign: "center",
         fontWeight: "bold",
-        fontSize: FontSize.medium,
+        fontSize: FontSize.large,
         marginBottom: Spacing,
     },
     infoText: {

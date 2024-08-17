@@ -9,12 +9,10 @@ import Colors from '@/constants/colors/Colors';
 import axios from 'axios';
 import RenderHtml from "react-native-render-html";
 import { useHeaderHeight } from '@react-navigation/elements';
-
 import AnimatedBoxes from '../components/animationTest';
-
 import IonIcons from 'react-native-vector-icons/Ionicons';
-
 import gradient from "@/assets/images/gradient_1080_1920(blue).png";
+import { PieChart } from 'react-native-gifted-charts';
 
 type RecipeScreenRouteProp = RouteProp<{ params: { userName: string, recipeId: string } }, 'params'>;
 
@@ -70,15 +68,13 @@ const RecipeScreen: React.FC = () => {
             const fetchSimilarRecipes_api = 'https://hhrq9za8y9.execute-api.eu-west-1.amazonaws.com/SearchRecipeAPIStage/similar';
             try {
                 console.log('Fetching recipe:', recipeId);
-    
+
                 const IdResponse = await axios.post(fetchFromID_api, { recipeId, userName });
-    
 
                 await new Promise(resolve => setTimeout(resolve, 3000));
 
-
                 // const SimilarResponse = await axios.post(fetchSimilarRecipes_api, { recipeId, userName });
-    
+
                 if (IdResponse.data) {
                     setRecipe(IdResponse.data);
                     console.log('API IdResponse:', IdResponse.data);
@@ -123,9 +119,6 @@ const RecipeScreen: React.FC = () => {
             fetchRecipeDetails();
         }
     }, [userName, recipeId]);
-    
-
-    
 
     if (!recipe) {
         return (
@@ -179,8 +172,12 @@ const RecipeScreen: React.FC = () => {
             console.error('Error disliking recipe:', error.response ? error.response.data : error.message);
         }
     };
-    
-    
+
+    const pieData = [
+        { value: parseFloat(recipe?.protein), color: '#d55607' },
+        { value: parseFloat(recipe?.fat), color: '#d1c107' },
+        { value: parseFloat(recipe?.carbs), color: '#064eea' },
+    ];
 
     return (
         <SafeAreaView style={[styles.container, { paddingTop: headerHeight / 1.2 }]}>
@@ -208,14 +205,33 @@ const RecipeScreen: React.FC = () => {
                     <Text style={styles.nutritionTitle}>Nutrition Details</Text>
                     <Text style={[styles.nutritionText,{fontWeight:"bold"}]}>Macro</Text>
                     <View style={styles.nutritionRow}>
-                        <Text style={[styles.nutritionText]}>{"\t\t"}Types: </Text>   
-                        <Text style={styles.nutritionType}>Protein - {recipe.protein}</Text>
-                        <Text style={styles.nutritionType}>Fat - {recipe.fat}</Text>
-                        <Text style={styles.nutritionType}>Carbohydrate - {recipe.carbs}</Text>
+                        <PieChart
+                            data={pieData}
+                            radius={80}
+                            donut
+                            textColor="white"
+                            textSize={15}
+                            fontWeight="bold"
+                        />
+
+                        <View style={styles.legendContainer}>
+                            <View style={styles.legendItem}>
+                                <View style={[styles.legendColorBox, { backgroundColor: '#d55607' }]} />
+                                <Text style={styles.legendLabel}>Protein: {recipe.protein}</Text>
+                            </View>
+                            <View style={styles.legendItem}>
+                                <View style={[styles.legendColorBox, { backgroundColor: '#d1c107' }]} />
+                                <Text style={styles.legendLabel}>Fat: {recipe.fat}</Text>
+                            </View>
+                            <View style={styles.legendItem}>
+                                <View style={[styles.legendColorBox, { backgroundColor: '#064eea' }]} />
+                                <Text style={styles.legendLabel}>Carbohydrates: {recipe.carbs}</Text>
+                            </View>
+                        </View>
                     </View>
                     <Text style={[styles.nutritionText,{fontWeight:"bold"}]}>Calories</Text>
                     <View style={styles.nutritionRow}>
-                        <Text style={styles.nutritionText}>{"\t\t"}Total Calories: {recipe.calories}</Text>
+                        <Text style={styles.nutritionText}>Total Calories: {recipe.calories}</Text>
                     </View>
                 </View>
                 <View style={styles.nutritionContainer}>
@@ -228,7 +244,8 @@ const RecipeScreen: React.FC = () => {
                 </View>
                 <View style={styles.instructionsContainer}>
                     <Text style={styles.instructionsTitle}>Recipe</Text>
-                    <RenderHtml contentWidth={width - Spacing * 4} source={{ html: recipe.instructions }} />
+                    <RenderHtml contentWidth={width - Spacing * 4} source={{ html: recipe.instructions || "<p>Not available</p>" }} />
+
                 </View>
                 <View style={styles.similarRecipesContainer}>
                     <Text style={styles.similarRecipesTitle}>Similar to this..</Text>
@@ -286,6 +303,10 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: Spacing,
     },
+    pieChartContainer: {
+        flex: 1,
+        alignItems: 'flex-start',  // Aligns the PieChart to the left
+    },
     nutritionType: {
         fontSize: FontSize.xSmall,
         color: Colors.text,
@@ -293,6 +314,25 @@ const styles = StyleSheet.create({
         paddingVertical: Spacing / 4,
         backgroundColor: Colors.gray,
         borderRadius: Spacing,
+    },
+    legendContainer: {
+        marginLeft: 16,
+        justifyContent: 'center',
+    },
+    legendItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 12,
+    },
+    legendColorBox: {
+        width: 16,
+        height: 16,
+        borderRadius: 8,
+        marginRight: 8,
+    },
+    legendLabel: {
+        fontSize: 16,
+        color: '#333',
     },
     instructionsContainer: {
         padding: Spacing,
