@@ -21,8 +21,9 @@ Setting up NutriApp is simple! Just follow these steps:
 1. **Clone the Repository:** 
    - Open your terminal or command prompt.
    - Clone the NutriApp repository to your local machine by running:
-    
-     git clone [https://github.com/arcmrt/NutriTech.git]
+     
+     ```bash
+     git clone https://github.com/arcmrt/NutriTech.git
    
 2. **Download the `src` Folder:** 
    - Visit the main drive link [Insert Drive Link Here] to download the `src` folder.
@@ -33,20 +34,24 @@ Setting up NutriApp is simple! Just follow these steps:
    - Ensure you have Node.js and npm installed on your system.
    - Navigate to the NutriApp directory in your terminal or command prompt.
    - Run the following command to install the required npm modules:
+     
      ```bash
      npm install
    
 4. **Run the App:**
    - Start the development server by running:
+     
      ```bash
      npm start
      ```
    - Use an emulator or a physical device to preview the app. Run the appropriate command for your platform:
      - For iOS:
+    
        ```bash
        npx react-native run-ios
        ```
      - For Android:
+       
        ```bash
        npx react-native run-android
        ```
