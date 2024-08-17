@@ -33,9 +33,9 @@ Setting up NutriApp is simple! Just follow these steps:
    - Ensure you have Node.js and npm installed on your system.
    - Navigate to the NutriApp directory in your terminal or command prompt.
    - Run the following command to install the required npm modules:
-  
+     ```bash
      npm install
-
+   
 4. **Run the App:**
    - Start the development server by running:
      ```bash
