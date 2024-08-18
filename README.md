@@ -49,6 +49,7 @@ Setting up NutriApp is simple! Just follow these steps:
 3. **Download the `src` Folder:** 
    - Visit the main drive link [[Drive Link](https://drive.google.com/drive/folders/1Yw4PsuoV3zHPdqEc-M6FjGfmITjCLgaZ?usp=sharing)] to download the `src` folder.
    - Copy the `src` folder and paste it into the NutriApp folder on your device.
+   - Note: Do not copy directly into the GitHub folder. Firstly, open NutriTech, and after, open the NutriApp folder, `src,` and then copy the folder here. 
 
 4. **Install Dependencies:**
    - Ensure you have Node.js and npm installed on your system.
@@ -72,7 +73,7 @@ Setting up NutriApp is simple! Just follow these steps:
        expo run:ios
        ```
      - For Android:
-       Note that you need Android Studio and an Android device emulator or download Expo Go to your physical device to scan the QR code.
+       You need Android Studio and an Android device emulator or download Expo Go to your physical device to scan the QR code.
        
        ```bash
        expo run:android
@@ -80,7 +81,7 @@ Setting up NutriApp is simple! Just follow these steps:
    - Follow the on-screen instructions to set up your profile and use NutriApp.
 
 ## Troubleshooting
-If you encounter any issues during installation or while using the app, don't hesitate to contact [Kaan](kaan.oguzkan@ug.bilkent.edu.tr).
+If you encounter issues during installation or while using the app, please get in touch with [Kaan](kaan.oguzkan@ug.bilkent.edu.tr).
 
 Thank you for choosing NutriApp! We’re excited to participate in your journey towards better nutrition and a healthier lifestyle.
 
