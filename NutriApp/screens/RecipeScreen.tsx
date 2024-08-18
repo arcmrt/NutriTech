@@ -131,15 +131,17 @@ const RecipeScreen: React.FC = () => {
         );
     }
 
-    const handleLikePress = () => {
-        if (isLiked) {
-            dislikeRecipeFunction();
-            setIsLiked(false);
-            setLikesCount((prevCount: number) => prevCount - 1);
-        } else {
+    const handleLikePress = async () => {
+        const likeRecipeCheck = 'https://mllvzslr65.execute-api.eu-west-1.amazonaws.com/default/checkLikedRecipe'
+        const likeResponse = await axios.post(likeRecipeCheck, {recipeId, userName});
+        if (likeResponse) {
             likeRecipeFunction();
             setIsLiked(true);
             setLikesCount((prevCount: number) => prevCount + 1);
+        } else {
+            dislikeRecipeFunction();
+            setIsLiked(false);
+            setLikesCount((prevCount: number) => prevCount - 1);
         }
     };
     
