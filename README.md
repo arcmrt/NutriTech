@@ -81,7 +81,7 @@ Setting up NutriApp is simple! Just follow these steps:
    - Follow the on-screen instructions to set up your profile and use NutriApp.
 
 ## Troubleshooting
-If you encounter issues during installation or while using the app, please get in touch with [Kaan](kaan.oguzkan@ug.bilkent.edu.tr).
+If you encounter issues during installation or while using the app, please get in touch with kaan.oguzkan@ug.bilkent.edu.tr
 
 Thank you for choosing NutriApp! We’re excited to participate in your journey towards better nutrition and a healthier lifestyle.
 
