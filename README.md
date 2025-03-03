@@ -1,5 +1,6 @@
 # NutriApp
-
+NutriApp Won the People's Choice Award!
+[![LinkedIn Post](NutriApp/images/Ekran görüntüsü 2025-03-03 165110.png)](https://www.linkedin.com/feed/update/urn:li:activity:7242864478235570176/)
 Welcome to **NutriApp**—your go-to solution for effortlessly tracking and improving your nutrition habits! NutriApp is designed to help you monitor your daily intake, set personalized goals, and maintain a balanced diet that fits your lifestyle.
 
 ## Developers
